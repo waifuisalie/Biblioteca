@@ -19,6 +19,7 @@ public class MenuPrincipalGUI extends JFrame {
         setSize(600, 400);
         setLocationRelativeTo(null); // Centraliza a janela na tela 
         
+
         // Crie um painel com imagem de fundo
         BackgroundPanel panel = new BackgroundPanel();
         panel.setLayout(new GridBagLayout()); // Utiliza GridBagLayout
