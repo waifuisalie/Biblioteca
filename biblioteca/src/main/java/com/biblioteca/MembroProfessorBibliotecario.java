@@ -1,13 +1,13 @@
 package com.biblioteca;
 
-public class Estudante extends Membro {
+public class MembroProfessorBibliotecario extends Membro {
     private int limiteEmprestimos;
     private int periodoEmprestimoDias;
 
-    public Estudante(String nome, int numeroMembro) {
+    public MembroProfessorBibliotecario(String nome, int numeroMembro) {
         super(nome, numeroMembro);
-        this.limiteEmprestimos = 4;
-        this.periodoEmprestimoDias = 21;
+        this.limiteEmprestimos = 7;
+        this.periodoEmprestimoDias = 30;
     }
 
     public int getLimiteEmprestimos() {

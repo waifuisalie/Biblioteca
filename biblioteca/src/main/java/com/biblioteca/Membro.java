@@ -1,7 +1,5 @@
 package com.biblioteca;
 
-// Classe para representar Membros
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,6 @@ class Membro extends Pessoa {
         this.numeroMembro = numeroMembro;
         this.historicoEmprestimos = new ArrayList<>();
     }
-    
 
     public int getNumeroMembro() {
         return numeroMembro;
@@ -44,6 +41,10 @@ class Membro extends Pessoa {
         emprestimo.getLivro().devolver();
         historicoEmprestimos.remove(emprestimo);
         System.out.println("Devolução realizada por " + getNome() + ": " + emprestimo.getLivro().getTitulo());
+    }
+
+    public String toCsvString() {
+        return getNome() + "," + numeroMembro;
     }
 
     @Override

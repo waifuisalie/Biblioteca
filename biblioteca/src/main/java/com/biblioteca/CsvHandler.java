@@ -18,6 +18,21 @@ public class CsvHandler {
         }
     }
 
+    // Método sobrecarregado para aceitar uma lista de objetos e um conversor para converter objetos em strings
+    public static <T> void escreverDados(String nomeArquivo, List<T> objetos, ConversorObjetoParaStrings<T> conversor) {
+        List<String[]> dados = converterObjetosParaDados(objetos, conversor);
+        escreverDados(nomeArquivo, dados);
+    }
+
+    private static <T> List<String[]> converterObjetosParaDados(List<T> objetos, ConversorObjetoParaStrings<T> conversor) {
+        return conversor.converterParaDados(objetos);
+    }
+
+    // Interface funcional para um conversor de objeto para strings
+    public interface ConversorObjetoParaStrings<T> {
+        List<String[]> converterParaDados(List<T> objetos);
+    }
+
     public static List<String[]> lerDados(String nomeArquivo) {
         try (CSVReader reader = new CSVReader(new FileReader(nomeArquivo))) {
             return reader.readAll();

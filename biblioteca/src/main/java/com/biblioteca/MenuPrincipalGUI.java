@@ -93,7 +93,13 @@ public class MenuPrincipalGUI extends JFrame {
         cadastrarMembroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Opção selecionada: Cadastrar Membro");
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        CadastroMembroGUI cadastroMembroGUI = new CadastroMembroGUI();
+                        cadastroMembroGUI.setVisible(true);
+                    }
+                });
             }
         });
 
