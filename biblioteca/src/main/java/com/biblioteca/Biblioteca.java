@@ -4,8 +4,8 @@ package com.biblioteca;
 public class Biblioteca {
     public static void main(String[] args) {
         // Exemplo de uso do sistema
-        Livro livro1 = new Livro("Java: The Complete Reference", "123", "Herbert Schildt");
-        Livro livro2 = new Livro("Clean Code", "456", "Robert C. Martin");
+        Livro livro1 = new Livro("Java: The Complete Reference", "123", "Herbert Schildt", 2000);
+        Livro livro2 = new Livro("Clean Code", "456", "Robert C. Martin", 2001);
 
         Membro membro1 = new Membro("João", 1);
         Membro membro2 = new Membro("Maria", 2);

@@ -17,8 +17,8 @@ public class MenuPrincipalGUI extends JFrame {
         setTitle("Biblioteca :3");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
-        setLocationRelativeTo(null); // Centraliza a janela na tela
-
+        setLocationRelativeTo(null); // Centraliza a janela na tela 
+        
         // Crie um painel com imagem de fundo
         BackgroundPanel panel = new BackgroundPanel();
         panel.setLayout(new GridBagLayout()); // Utiliza GridBagLayout

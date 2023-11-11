@@ -1,18 +1,27 @@
 package com.biblioteca;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Classe para representar Livros
 class Livro extends ItemBiblioteca {
     private String autor;
+    private int ano; // Adicionando o ano
     private boolean disponivel;
 
-    public Livro(String titulo, String codigo, String autor) {
+    public Livro(String titulo, String codigo, String autor, int ano) {
         super(titulo, codigo);
         this.autor = autor;
+        this.ano = ano;
         this.disponivel = true;
     }
 
     public String getAutor() {
         return autor;
+    }
+
+    public int getAno() {
+        return ano;
     }
 
     public boolean isDisponivel() {
@@ -40,7 +49,14 @@ class Livro extends ItemBiblioteca {
         return "Livro{" +
                 "titulo='" + getTitulo() + '\'' +
                 ", autor='" + autor + '\'' +
+                ", ano=" + ano +
                 ", disponivel=" + disponivel +
                 '}';
+    }
+
+    public List<String[]> obterDadosParaCSV() {
+        List<String[]> dados = new ArrayList<>();
+        dados.add(new String[]{getTitulo(), getCodigo(), autor, Integer.toString(ano), Boolean.toString(disponivel)});
+        return dados;
     }
 }
