@@ -57,7 +57,7 @@ public class CadastroLivroGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Obter os valores do formulário
                 String titulo = tituloField.getText();
-                String codigo = tituloField.getText();
+                String codigo = codigoField.getText();
                 String autor = autorField.getText();
                 int ano = Integer.parseInt(anoField.getText());
 
