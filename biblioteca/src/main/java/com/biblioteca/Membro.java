@@ -14,6 +14,7 @@ class Membro extends Pessoa {
         this.numeroMembro = numeroMembro;
         this.historicoEmprestimos = new ArrayList<>();
     }
+    
 
     public int getNumeroMembro() {
         return numeroMembro;
