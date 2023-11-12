@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class CadastroLivroGUI extends JFrame {
+
     public CadastroLivroGUI() {
         // Configurações básicas da janela
         setTitle("Cadastro de Livro");
@@ -63,8 +64,9 @@ public class CadastroLivroGUI extends JFrame {
                 int ano = Integer.parseInt(anoField.getText());
 
                 // Verificar se o livro já existe pelo título ou código
-                if (VerificadorExistencia.registroJaCadastrado("livros.csv", 0, titulo) ||
-                    VerificadorExistencia.registroJaCadastrado("livros.csv", 1, codigo)) {
+                if (VerificadorArquivo.verificarExistenciaArquivo("livros.csv") &&
+                    (VerificadorExistencia.registroJaCadastrado("livros.csv", 0, titulo) ||
+                    VerificadorExistencia.registroJaCadastrado("livros.csv", 1, codigo))) {
                     JOptionPane.showMessageDialog(null, "Livro já cadastrado!");
                     return; // Impede que o restante do código seja executado
                 }
@@ -73,7 +75,7 @@ public class CadastroLivroGUI extends JFrame {
                 Livro livro = new Livro(titulo, codigo, autor, ano);
 
                 // Verificar e criar o arquivo CSV de livros
-                verificarECriarArquivoCSV("livros.csv");
+                VerificadorArquivo.verificarECriarArquivoCSV("livros.csv");
 
                 // Salvar as informações do livro no arquivo CSV
                 List<String[]> dadosLivro = livro.obterDadosParaCSV();
@@ -97,17 +99,6 @@ public class CadastroLivroGUI extends JFrame {
         });
     }
 
-    private void verificarECriarArquivoCSV(String nomeArquivo) {
-        if (!Files.exists(Paths.get(nomeArquivo))) {
-            try {
-                Files.createFile(Paths.get(nomeArquivo));
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Erro ao criar arquivo CSV.");
-            }
-        }
-    }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -118,4 +109,3 @@ public class CadastroLivroGUI extends JFrame {
         });
     }
 }
-

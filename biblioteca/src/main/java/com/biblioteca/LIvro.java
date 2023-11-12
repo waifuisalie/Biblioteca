@@ -28,6 +28,10 @@ class Livro extends ItemBiblioteca {
         return disponivel;
     }
 
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
+    }
+
     @Override
     public void emprestar() {
         if (disponivel) {

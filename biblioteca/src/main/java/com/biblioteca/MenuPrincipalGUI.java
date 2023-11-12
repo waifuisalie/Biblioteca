@@ -80,7 +80,6 @@ public class MenuPrincipalGUI extends JFrame {
             }
         });
         
-
         devolverLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,7 +98,13 @@ public class MenuPrincipalGUI extends JFrame {
         buscarLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Opção selecionada: Buscar Livro");
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        BuscaLivroGUI buscaLivroGUI = new BuscaLivroGUI();
+                        buscaLivroGUI.setVisible(true);
+                    }
+                });
             }
         });
 
@@ -122,8 +127,6 @@ public class MenuPrincipalGUI extends JFrame {
                 System.exit(0);
             }
         });
-
-        
     }
 
     private class BackgroundPanel extends JPanel {

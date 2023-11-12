@@ -20,12 +20,23 @@ public class VerificadorArquivo {
         }
     }
 
-    private static boolean verificarExistenciaArquivo(String nomeArquivo) {
+    public static void verificarECriarArquivoCSV(String nomeArquivo) {
+        if (verificarExistenciaArquivo(nomeArquivo)) {
+            System.out.println("O arquivo já existe.");
+            // Adicione aqui a lógica específica, se necessário, quando o arquivo já existir.
+        } else {
+            System.out.println("O arquivo não existe. Será criado.");
+            // Adicione aqui a lógica específica para criar o arquivo, se ele não existir.
+            criarArquivo(nomeArquivo);
+        }
+    }
+
+    public static boolean verificarExistenciaArquivo(String nomeArquivo) {
         Path path = Paths.get(nomeArquivo);
         return Files.exists(path);
     }
 
-    private static void criarArquivo(String nomeArquivo) {
+    public static void criarArquivo(String nomeArquivo) {
         Path path = Paths.get(nomeArquivo);
         try {
             Files.createFile(path);
