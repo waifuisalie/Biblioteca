@@ -67,45 +67,42 @@ public class BuscaLivroGUI extends JFrame {
     }
 
     private void exibirResultadosBusca(List<String[]> dadosLivros, String tipoBusca, String termoBusca) {
-        // Implemente a lógica para buscar e exibir os resultados
-        // Pode ser útil usar um JOptionPane ou outra interface gráfica para exibir os resultados
-        // ...
-    
-        // Exemplo de uso do JOptionPane para exibir resultados em um diálogo simples:
         StringBuilder resultados = new StringBuilder("Resultados da busca por " + tipoBusca + ":\n");
         boolean encontrouResultados = false;
     
         for (String[] livro : dadosLivros) {
+            boolean livroCorrespondeBusca = false;
+    
             // Verifica se o termo de busca está no título, código, autor ou ano do livro, dependendo do tipo de busca
             switch (tipoBusca.toLowerCase()) {
                 case "título":
-                    if (livro[0].toLowerCase().contains(termoBusca.toLowerCase())) {
-                        resultados.append("Título: ").append(livro[0]).append(", Código: ").append(livro[1])
-                                .append(", Autor: ").append(livro[2]).append(", Ano: ").append(livro[3]).append("\n");
-                        encontrouResultados = true;
-                        // Adicione outros detalhes do livro, se necessário
-                    }
+                    livroCorrespondeBusca = livro[0].toLowerCase().contains(termoBusca.toLowerCase());
                     break;
                 case "código":
-                    if (livro[1].toLowerCase().contains(termoBusca.toLowerCase())) {
-                        resultados.append("Título: ").append(livro[0]).append(", Código: ").append(livro[1])
-                                .append(", Autor: ").append(livro[2]).append(", Ano: ").append(livro[3]).append("\n");
-                        encontrouResultados = true;
-                        // Adicione outros detalhes do livro, se necessário
-                    }
+                    livroCorrespondeBusca = livro[1].toLowerCase().contains(termoBusca.toLowerCase());
                     break;
                 case "autor":
-                    if (livro[2].toLowerCase().contains(termoBusca.toLowerCase())) {
-                        resultados.append("Título: ").append(livro[0]).append(", Código: ").append(livro[1])
-                                .append(", Autor: ").append(livro[2]).append(", Ano: ").append(livro[3]).append("\n");
-                        encontrouResultados = true;
-                        // Adicione outros detalhes do livro, se necessário
-                    }
+                    livroCorrespondeBusca = livro[2].toLowerCase().contains(termoBusca.toLowerCase());
                     break;
                 default:
                     // Tipo de busca inválido
                     JOptionPane.showMessageDialog(null, "Tipo de busca inválido.");
                     return;
+            }
+    
+            // Se o livro corresponde à busca, incluir detalhes na lista de resultados
+            if (livroCorrespondeBusca) {
+                resultados.append("Título: ").append(livro[0]).append(", Código: ").append(livro[1])
+                        .append(", Autor: ").append(livro[2]).append(", Ano: ").append(livro[3]);
+    
+                // Adicione detalhes sobre a disponibilidade
+                if (livro.length > 4) {
+                    boolean disponivel = Boolean.parseBoolean(livro[4]);
+                    resultados.append(", Disponível para Empréstimo: ").append(disponivel ? "Sim" : "Não");
+                }
+    
+                resultados.append("\n");
+                encontrouResultados = true;
             }
         }
     
@@ -117,6 +114,7 @@ public class BuscaLivroGUI extends JFrame {
             JOptionPane.showMessageDialog(null, resultados.toString());
         }
     }
+    
     
 
     public static void main(String[] args) {

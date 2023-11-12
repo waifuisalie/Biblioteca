@@ -87,11 +87,17 @@ public class MenuPrincipalGUI extends JFrame {
             }
         });
 
-         // Configure a ação do botão "Emprestar Livro"
         emprestarLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Opção selecionada: Emprestar Livro");
+                // Criar e exibir a janela de empréstimo
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        EmprestarLivroGUI emprestarLivroGUI = new EmprestarLivroGUI();
+                        emprestarLivroGUI.setVisible(true);
+                    }
+                });
             }
         });
 
