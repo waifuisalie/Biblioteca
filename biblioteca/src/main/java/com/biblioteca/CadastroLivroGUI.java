@@ -13,9 +13,9 @@ public class CadastroLivroGUI extends JFrame {
     public CadastroLivroGUI() {
         // Configurações básicas da janela
         setTitle("Cadastro de Livro");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha apenas a janela atual ao clicar em fechar
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
-        setLocationRelativeTo(null); // Centraliza a janela na tela
+        setLocationRelativeTo(null);
 
         // Crie um painel para adicionar componentes
         JPanel panel = new JPanel();
@@ -63,7 +63,8 @@ public class CadastroLivroGUI extends JFrame {
                 int ano = Integer.parseInt(anoField.getText());
 
                 // Verificar se o livro já existe pelo título ou código
-                if (livroJaCadastrado(titulo, codigo)) {
+                if (VerificadorExistencia.registroJaCadastrado("livros.csv", 0, titulo) ||
+                    VerificadorExistencia.registroJaCadastrado("livros.csv", 1, codigo)) {
                     JOptionPane.showMessageDialog(null, "Livro já cadastrado!");
                     return; // Impede que o restante do código seja executado
                 }
@@ -84,28 +85,6 @@ public class CadastroLivroGUI extends JFrame {
                 // Fechar a janela de cadastro após o cadastro
                 dispose();
             }
-
-            private boolean livroJaCadastrado(String titulo, String codigo) {
-                // Verificar se o arquivo CSV existe antes de tentar lê-lo
-                String nomeArquivoLivros = "livros.csv";
-                
-                // Verificar e criar o arquivo CSV de livros, se necessário
-                verificarECriarArquivoCSV(nomeArquivoLivros);
-            
-                List<String[]> dadosLivros = CsvHandler.lerDados(nomeArquivoLivros);
-            
-                for (String[] dadosLivro : dadosLivros) {
-                    String tituloCadastrado = dadosLivro[0];
-                    String codigoCadastrado = dadosLivro[1];
-            
-                    // Comparar ignorando maiúsculas/minúsculas e verificando tanto título quanto código
-                    if (tituloCadastrado.equalsIgnoreCase(titulo) || codigoCadastrado.equals(codigo)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            
         });
 
         // Configure a ação do botão "Cancelar"
@@ -139,3 +118,4 @@ public class CadastroLivroGUI extends JFrame {
         });
     }
 }
+

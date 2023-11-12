@@ -27,6 +27,7 @@ public class MenuPrincipalGUI extends JFrame {
         // Crie os botões para as opções do menu
         JButton cadastrarLivroButton = new JButton("Cadastrar Livro");
         JButton devolverLivroButton = new JButton("Devolver Livro");
+        JButton emprestarLivroButton = new JButton("Emprestar Livro"); // Novo botão
         JButton buscarLivroButton = new JButton("Buscar Livro");
         JButton cadastrarMembroButton = new JButton("Cadastrar Membro");
         JButton sairButton = new JButton("Sair");
@@ -35,11 +36,11 @@ public class MenuPrincipalGUI extends JFrame {
         Dimension buttonSize = new Dimension(200, 40);
         cadastrarLivroButton.setPreferredSize(buttonSize);
         devolverLivroButton.setPreferredSize(buttonSize);
+        emprestarLivroButton.setPreferredSize(buttonSize);
         buscarLivroButton.setPreferredSize(buttonSize);
         cadastrarMembroButton.setPreferredSize(buttonSize);
         sairButton.setPreferredSize(buttonSize);
 
-        // Adicione os botões ao painel
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -49,13 +50,17 @@ public class MenuPrincipalGUI extends JFrame {
         gbc.gridy = 1;
         panel.add(devolverLivroButton, gbc);
 
+        // Adicione o botão "Emprestar Livro" logo após o botão "Devolver Livro"
         gbc.gridy = 2;
-        panel.add(buscarLivroButton, gbc);
+        panel.add(emprestarLivroButton, gbc);
 
         gbc.gridy = 3;
-        panel.add(cadastrarMembroButton, gbc);
+        panel.add(buscarLivroButton, gbc);
 
         gbc.gridy = 4;
+        panel.add(cadastrarMembroButton, gbc);
+
+        gbc.gridy = 5;
         panel.add(sairButton, gbc);
 
         // Adicione o painel à janela
@@ -80,6 +85,14 @@ public class MenuPrincipalGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Opção selecionada: Devolver Livro");
+            }
+        });
+
+         // Configure a ação do botão "Emprestar Livro"
+        emprestarLivroButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Opção selecionada: Emprestar Livro");
             }
         });
 

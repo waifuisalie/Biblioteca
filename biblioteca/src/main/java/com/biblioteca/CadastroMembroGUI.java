@@ -58,6 +58,12 @@ public class CadastroMembroGUI extends JFrame {
                 int numeroMembro = Integer.parseInt(numeroMembroField.getText());
                 String tipoMembro = (String) tipoMembroComboBox.getSelectedItem();
 
+                // Verificar se o membro com o mesmo número já está cadastrado
+                if (VerificadorExistencia.registroJaCadastrado("membros.csv", 1, Integer.toString(numeroMembro))) {
+                    JOptionPane.showMessageDialog(null, "Membro com o mesmo número já cadastrado!");
+                    return;
+                }
+                
                 // Criar instância do membro correspondente ao tipo selecionado
                 Membro membro = criarMembro(nome, numeroMembro, tipoMembro);
 
@@ -68,7 +74,7 @@ public class CadastroMembroGUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Membro cadastrado com sucesso!");
 
                 // Converter o membro para uma lista de strings
-                List<String[]> dadosMembro = converterMembroParaDados(membro);
+                List<String[]> dadosMembro = converterMembroParaDados(membro, tipoMembro);
 
                 // Escrever as informações do membro no arquivo CSV
                 CsvHandler.escreverDados("membros.csv", dadosMembro);
@@ -89,12 +95,13 @@ public class CadastroMembroGUI extends JFrame {
     }
 
     // Método para converter um objeto Membro em uma lista de strings
-    private List<String[]> converterMembroParaDados(Membro membro) {
+    private List<String[]> converterMembroParaDados(Membro membro, String tipoMembro) {
         List<String[]> dados = new ArrayList<>();
-        // Adicione os atributos do membro à lista de strings
-        dados.add(new String[]{membro.getNome(), String.valueOf(membro.getNumeroMembro())});
+        // Adicione os atributos do membro à lista de strings, incluindo o tipo de membro
+        dados.add(new String[]{membro.getNome(), String.valueOf(membro.getNumeroMembro()), tipoMembro});
         return dados;
     }
+    
 
     private Membro criarMembro(String nome, int numeroMembro, String tipoMembro) {
         switch (tipoMembro) {
