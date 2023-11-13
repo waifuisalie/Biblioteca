@@ -154,12 +154,14 @@ public class EmprestarLivroGUI extends JFrame {
     private void mostrarTodosLivros() {
         List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
         preencherTabela(dadosLivros, "", "");
-
-        sorter = new TableRowSorter<>(tableModel);
-        resultadosTable.setRowSorter(sorter);
+    
+        // Limpar o filtro existente
+        sorter.setRowFilter(null);
+    
         termoBuscaField.setText("");
         criterioBuscaComboBox.setSelectedIndex(0);
     }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
