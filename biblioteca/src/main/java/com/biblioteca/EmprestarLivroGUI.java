@@ -5,7 +5,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +18,8 @@ public class EmprestarLivroGUI extends JFrame {
     private JPanel mainPanel;
     private JButton buscarLivrosButton;
     private JButton emprestarButton;
-    private JButton cancelarButton;
+    private JButton cancelarBuscaButton;
+    private JButton cancelarEmprestimoButton;
     private JTable resultadosTable;
     private TableRowSorter<DefaultTableModel> sorter;
 
@@ -39,9 +39,26 @@ public class EmprestarLivroGUI extends JFrame {
         buscaPanel.add(new JLabel("Pesquisar por:"));
         buscaPanel.add(criterioBuscaComboBox);
         buscaPanel.add(termoBuscaField);
+        buscarLivrosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String termoBusca = termoBuscaField.getText();
+                String criterioBusca = (String) criterioBuscaComboBox.getSelectedItem();
+                List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+                preencherTabela(dadosLivros, termoBusca, criterioBusca);
+            }
+        });
+
+        cancelarBuscaButton = new JButton("Cancelar");
+        cancelarBuscaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarTodosLivros();
+            }
+        });
+
         buscaPanel.add(buscarLivrosButton);
-        cancelarButton = new JButton("Cancelar");
-        buscaPanel.add(cancelarButton);
+        buscaPanel.add(cancelarBuscaButton);
         mainPanel.add(buscaPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel();
@@ -51,36 +68,18 @@ public class EmprestarLivroGUI extends JFrame {
 
         JPanel emprestimoPanel = new JPanel();
         emprestarButton = new JButton("Realizar Empréstimo");
-        cancelarButton = new JButton("Cancelar");
-        emprestimoPanel.add(cancelarButton);
-        emprestimoPanel.add(emprestarButton);
-        mainPanel.add(emprestimoPanel, BorderLayout.SOUTH);
 
-        buscarLivrosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String termoBusca = termoBuscaField.getText();
-                String criterioBusca = (String) criterioBuscaComboBox.getSelectedItem();
-
-                List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
-                preencherTabela(dadosLivros, termoBusca, criterioBusca);
-            }
-        });
-
-        emprestarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Implementar a lógica para realizar o empréstimo
-                // ...
-            }
-        });
-
-        cancelarButton.addActionListener(new ActionListener() {
+        cancelarEmprestimoButton = new JButton("Cancelar");
+        cancelarEmprestimoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
+
+        emprestimoPanel.add(cancelarEmprestimoButton);
+        emprestimoPanel.add(emprestarButton);
+        mainPanel.add(emprestimoPanel, BorderLayout.SOUTH);
 
         resultadosTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -93,15 +92,14 @@ public class EmprestarLivroGUI extends JFrame {
 
         List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
         preencherTabela(dadosLivros, "", "");
-        
-        // Configurar o TableRowSorter
+
         sorter = new TableRowSorter<>(tableModel);
         resultadosTable.setRowSorter(sorter);
     }
 
     private void setBotoesVisiveis(boolean visivel) {
         emprestarButton.setEnabled(visivel);
-        cancelarButton.setEnabled(visivel);
+        cancelarEmprestimoButton.setEnabled(visivel);
     }
 
     private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
@@ -151,6 +149,16 @@ public class EmprestarLivroGUI extends JFrame {
             sorter.setRowFilter(rowFilter);
             mainPanel.revalidate();
         }
+    }
+
+    private void mostrarTodosLivros() {
+        List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+        preencherTabela(dadosLivros, "", "");
+
+        sorter = new TableRowSorter<>(tableModel);
+        resultadosTable.setRowSorter(sorter);
+        termoBuscaField.setText("");
+        criterioBuscaComboBox.setSelectedIndex(0);
     }
 
     public static void main(String[] args) {
