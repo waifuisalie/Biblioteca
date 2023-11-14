@@ -32,11 +32,17 @@ class Livro extends ItemBiblioteca {
         this.disponivel = disponivel;
     }
 
-    @Override
+    public void definirComoIndisponivel() {
+        this.disponivel = false;
+    }
+
+    
+
+    //idk if I am gonna use this
     public void emprestar() {
         if (disponivel) {
             System.out.println("Livro emprestado: " + getTitulo());
-            disponivel = false;
+            setDisponivel(false);
         } else {
             System.out.println("Livro indisponível para empréstimo: " + getTitulo());
         }
@@ -45,7 +51,7 @@ class Livro extends ItemBiblioteca {
     @Override
     public void devolver() {
         System.out.println("Livro devolvido: " + getTitulo());
-        disponivel = true;
+        setDisponivel(true);
     }
 
     @Override

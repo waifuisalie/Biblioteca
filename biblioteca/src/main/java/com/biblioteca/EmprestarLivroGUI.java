@@ -8,6 +8,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class EmprestarLivroGUI extends JFrame {
         buscaPanel.add(new JLabel("Pesquisar por:"));
         buscaPanel.add(criterioBuscaComboBox);
         buscaPanel.add(termoBuscaField);
+
         buscarLivrosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +71,27 @@ public class EmprestarLivroGUI extends JFrame {
 
         JPanel emprestimoPanel = new JPanel();
         emprestarButton = new JButton("Realizar Empréstimo");
+
+        emprestarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Verificar se uma linha está selecionada
+                int selectedRow = resultadosTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    // Obter os dados do livro selecionado
+                    String titulo = (String) resultadosTable.getValueAt(selectedRow, 0);
+                    String codigo = (String) resultadosTable.getValueAt(selectedRow, 1);
+                    String autor = (String) resultadosTable.getValueAt(selectedRow, 2);
+                    String ano = (String) resultadosTable.getValueAt(selectedRow, 3);
+        
+                    // Agora você tem os dados do livro selecionado, e pode prosseguir com a lógica de empréstimo.
+                    realizarEmprestimo(titulo, codigo, autor, ano);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nenhum livro selecionado.");
+                }
+            }
+        });
+        
 
         cancelarEmprestimoButton = new JButton("Cancelar");
         cancelarEmprestimoButton.addActionListener(new ActionListener() {
@@ -113,23 +137,28 @@ public class EmprestarLivroGUI extends JFrame {
 
     private void preencherTabela(List<String[]> dados, String termoBusca, String criterioBusca) {
         tableModel.setRowCount(0);
-
+    
         if (dados == null || dados.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nenhum livro disponível.");
             return;
         }
-
+    
         String[] colunas = {"Título", "Código", "Autor", "Ano"};
         tableModel.setColumnIdentifiers(colunas);
-
+    
         for (String[] livro : dados) {
-            Object[] rowData = {livro[0], livro[1], livro[2], livro[3]};
-            tableModel.addRow(rowData);
+            boolean disponivel = livro.length > 4 && "true".equalsIgnoreCase(livro[4]);
+    
+            // Verificar se o livro está disponível
+            if (disponivel) {
+                Object[] rowData = {livro[0], livro[1], livro[2], livro[3]};
+                tableModel.addRow(rowData);
+            }
         }
-
+    
         if (!termoBusca.isEmpty() && criterioBusca != null) {
             int colunaIndex = -1;
-
+    
             switch (criterioBusca.toLowerCase()) {
                 case "título":
                     colunaIndex = 0;
@@ -144,12 +173,13 @@ public class EmprestarLivroGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Critério de busca inválido.");
                     return;
             }
-
+    
             RowFilter<Object, Object> rowFilter = RowFilter.regexFilter("(?i)" + termoBusca, colunaIndex);
             sorter.setRowFilter(rowFilter);
             mainPanel.revalidate();
         }
     }
+    
 
     private void mostrarTodosLivros() {
         List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
@@ -161,7 +191,56 @@ public class EmprestarLivroGUI extends JFrame {
         termoBuscaField.setText("");
         criterioBuscaComboBox.setSelectedIndex(0);
     }
+
+    private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
+        String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
+        
+        // Verificar a existência do membro
+        if (verificarExistenciaMembro(nomeMembro)) {
+            // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
+            String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
+            adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao);
+            
+            JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
+        }
+    }
+
+    private void adicionarEmprestimoAoCSV(String nomeMembro, String tituloLivro, String dataDevolucao) {
+        // Construir a linha de empréstimo
+        String tipoMembro = CsvHandler.obterTipoMembro(nomeMembro, "membros.csv");
+        String emprestimo = String.format("%s, %s, %s, %s, %s",
+                tipoMembro, nomeMembro, tituloLivro, obterDataAtual(), dataDevolucao);
     
+        // Escrever a linha no arquivo CSV de empréstimos usando CsvHandler
+        CsvHandler.escreverLinha("emprestimos.csv", emprestimo);
+    }
+
+    private String obterDataAtual() {
+        // Obtém a data atual
+        LocalDate dataAtual = LocalDate.now();
+
+        // Formata a data para o formato desejado (dd/MM/yyyy)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataFormatada = dataAtual.format(formatter);
+
+        return dataFormatada;
+    }
+    
+    
+
+    private boolean verificarExistenciaMembro(String nomeMembro) {
+        List<String[]> dadosMembros = verificarECarregarArquivoCSV("membros.csv");
+    
+        for (String[] membro : dadosMembros) {
+            if (membro[0].equalsIgnoreCase(nomeMembro)) {
+                return true; // Membro encontrado
+            }
+        }
+    
+        return false; // Membro não encontrado
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
