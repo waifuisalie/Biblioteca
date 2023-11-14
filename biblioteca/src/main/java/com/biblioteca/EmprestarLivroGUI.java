@@ -192,20 +192,27 @@ public class EmprestarLivroGUI extends JFrame {
         criterioBuscaComboBox.setSelectedIndex(0);
     }
 
-    private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
-        String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
-        
-        // Verificar a existência do membro
-        if (verificarExistenciaMembro(nomeMembro)) {
-            // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
-            String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
-            adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao);
-            
-            JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
-        }
+    // Dentro do método realizarEmprestimo, após adicionar o empréstimo ao CSV
+private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
+    String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
+
+    // Verificar a existência do membro
+    if (verificarExistenciaMembro(nomeMembro)) {
+        // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
+        String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
+        adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao);
+
+        // Atualizar a disponibilidade do livro para "false" no arquivo livros.csv
+        String chaveLivro = codigo; // Você pode ajustar a chave conforme necessário
+        String novaLinhaLivro = String.format("%s, %s, %s, %s, false", titulo, codigo, autor, ano);
+        CsvHandler.atualizarLinha("livros.csv", chaveLivro, novaLinhaLivro);
+
+        JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
+    } else {
+        JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
     }
+}
+
 
     private void adicionarEmprestimoAoCSV(String nomeMembro, String tituloLivro, String dataDevolucao) {
         // Construir a linha de empréstimo
