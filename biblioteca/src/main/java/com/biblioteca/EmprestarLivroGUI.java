@@ -200,7 +200,7 @@ private void realizarEmprestimo(String titulo, String codigo, String autor, Stri
     if (verificarExistenciaMembro(nomeMembro)) {
         // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
         String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
-        adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao);
+        adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao, codigo);
 
         // Atualizar a disponibilidade do livro para "false" no arquivo livros.csv
         String chaveLivro = codigo; // Você pode ajustar a chave conforme necessário
@@ -208,17 +208,20 @@ private void realizarEmprestimo(String titulo, String codigo, String autor, Stri
         CsvHandler.atualizarLinha("livros.csv", chaveLivro, novaLinhaLivro);
 
         JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
+
+        // update table 
+        mostrarTodosLivros();
     } else {
         JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
     }
 }
 
 
-    private void adicionarEmprestimoAoCSV(String nomeMembro, String tituloLivro, String dataDevolucao) {
+    private void adicionarEmprestimoAoCSV(String nomeMembro, String tituloLivro, String dataDevolucao, String codigo) {
         // Construir a linha de empréstimo
         String tipoMembro = CsvHandler.obterTipoMembro(nomeMembro, "membros.csv");
-        String emprestimo = String.format("%s, %s, %s, %s, %s",
-                tipoMembro, nomeMembro, tituloLivro, obterDataAtual(), dataDevolucao);
+        String emprestimo = String.format("%s, %s, %s, %s, %s, %s",
+                tipoMembro, nomeMembro, codigo, tituloLivro, obterDataAtual(), dataDevolucao);
     
         // Escrever a linha no arquivo CSV de empréstimos usando CsvHandler
         CsvHandler.escreverLinha("emprestimos.csv", emprestimo);

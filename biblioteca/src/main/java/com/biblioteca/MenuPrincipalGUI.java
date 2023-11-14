@@ -83,7 +83,13 @@ public class MenuPrincipalGUI extends JFrame {
         devolverLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Opção selecionada: Devolver Livro");
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        DevolverLivroGUI devolverLivroGUI = new DevolverLivroGUI();
+                        devolverLivroGUI.setVisible(true);
+                    }
+                });
             }
         });
 
