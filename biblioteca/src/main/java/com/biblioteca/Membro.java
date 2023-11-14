@@ -3,7 +3,7 @@ package com.biblioteca;
 import java.util.ArrayList;
 import java.util.List;
 
-class Membro extends Pessoa {
+public abstract class Membro extends Pessoa implements CalculaMulta{
     private int numeroMembro;
     private String tipo;
     private List<Emprestimo> historicoEmprestimos;

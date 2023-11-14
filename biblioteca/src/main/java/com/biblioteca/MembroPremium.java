@@ -1,6 +1,6 @@
 package com.biblioteca;
 
-public class MembroPremium extends Membro {
+public class MembroPremium extends Membro implements CalculaMulta {
     private int limiteEmprestimos;
     private int periodoEmprestimoDias;
     private double precoMulta;
@@ -27,6 +27,25 @@ public class MembroPremium extends Membro {
     public void setPrecoMulta(double precoMulta) {
         this.precoMulta = precoMulta;
     }
+
+    @Override
+    public double calcularMulta(Emprestimo emprestimo) {
+        // Lógica para calcular a multa para membros Premium
+        // Use a diferença entre a data atual e a data de devolução para calcular os dias de atraso
+        int diasAtraso = calcularDiasAtraso(emprestimo.getDataDevolucao());
+        
+        if (diasAtraso > 0) {
+            return diasAtraso * precoMulta;
+        } else {
+            return 0.0; // Sem multa se não houver atraso
+        }
+    }
+    
+    // Implemente o método calcularDiasAtraso aqui
+    private int calcularDiasAtraso(String dataDevolucao) {
+        // Lógica para calcular a diferença em dias entre a data atual e a data de devolução
+        // Implemente conforme necessário
+        // Retorna a diferença em dias
+        return 0;
+    }
 }
-
-
