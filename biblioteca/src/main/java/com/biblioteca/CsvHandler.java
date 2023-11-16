@@ -44,6 +44,10 @@ public class CsvHandler {
         return null;
     }
 
+    public static List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
+        return lerDados(nomeArquivo);
+    }
+
     public static void escreverLinha(String nomeArquivo, String linha) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo, true))) {
             writer.write(linha);

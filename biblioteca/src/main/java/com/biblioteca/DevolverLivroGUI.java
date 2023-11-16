@@ -100,7 +100,7 @@ public class DevolverLivroGUI extends JFrame {
 
     private Livro obterLivroPorCodigo(String codigoLivro) {
         // Carregar os dados dos empréstimos
-        List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+        List<String[]> emprestimos = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
 
         // Iterar sobre as linhas para encontrar o livro com o código correspondente
         for (String[] emprestimo : emprestimos) {
@@ -119,17 +119,7 @@ public class DevolverLivroGUI extends JFrame {
         return null;
     }
 
-    
-    
-
-    private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
-        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
-            return CsvHandler.lerDados(nomeArquivo);
-        } else {
-            System.out.println("Arquivo não encontrado: " + nomeArquivo);
-            return List.of();
-        }
-    }
+   
 
     private void preencherTabela(List<String[]> dadosLivros, List<String[]> emprestimos, String nomeMembro) {
         tableModel.setRowCount(0);
@@ -162,8 +152,8 @@ public class DevolverLivroGUI extends JFrame {
     private void carregarLivros() {
         String nomeMembro = nomeMembroField.getText();
         if (verificarExistenciaMembro(nomeMembro)) {
-            List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
-            List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+            List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
+            List<String[]> emprestimos = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
             preencherTabela(dadosLivros, emprestimos, nomeMembro);
         } else {
             JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
@@ -176,7 +166,7 @@ public class DevolverLivroGUI extends JFrame {
                 if (selectedRow != -1) {
                     String codigoLivro = ((String) resultadosTable.getValueAt(selectedRow, 1)).trim();
                     String nomeMembro = nomeMembroField.getText();  // Obtém o nome do membro do TextField
-                    List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+                    List<String[]> emprestimos = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
         
                     // Certifique-se de que a lista não está vazia e tem dados suficientes
                     if (!emprestimos.isEmpty() && emprestimos.get(0).length > 5) {
@@ -296,7 +286,7 @@ public class DevolverLivroGUI extends JFrame {
     
 
     private boolean verificarExistenciaMembro(String nomeMembro) {
-        List<String[]> dadosMembros = verificarECarregarArquivoCSV("membros.csv");
+        List<String[]> dadosMembros = CsvHandler.verificarECarregarArquivoCSV("membros.csv");
     
         for (String[] membro : dadosMembros) {
             if (membro[0].equalsIgnoreCase(nomeMembro)) {
