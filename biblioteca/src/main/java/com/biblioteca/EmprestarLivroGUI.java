@@ -192,7 +192,6 @@ public class EmprestarLivroGUI extends JFrame {
         criterioBuscaComboBox.setSelectedIndex(0);
     }
 
-    // Dentro do método realizarEmprestimo, após adicionar o empréstimo ao CSV
     private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
         String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
 

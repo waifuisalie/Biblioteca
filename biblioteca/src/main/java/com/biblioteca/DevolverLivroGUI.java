@@ -105,15 +105,68 @@ public class DevolverLivroGUI extends JFrame {
 
                                     // Verifique a escolha do usuário
                                     if (escolha == JOptionPane.YES_OPTION) {
-                                        // Usuário concordou em pagar a multa, implemente a lógica apropriada
-                                        // ...
+                                        // Usuário concordou em pagar a multa
+                                        // 1. Excluir linha de empréstimo em emprestimos.csv
+                                        List<String[]> emprestimos_updt = CsvHandler.lerDados("emprestimos.csv");
+                                        for (int i = 0; i < emprestimos_updt.size(); i++) {
+                                            String[] emprestimo_updt = emprestimos_updt.get(i);
+                                            if (emprestimo_updt.length > 2 && emprestimo_updt[2].trim().equals(codigoLivro)) {
+                                                emprestimos_updt.remove(i);
+                                                break;
+                                            }
+                                        }
+                                        CsvHandler.escreverLinhas("emprestimos.csv", emprestimos_updt);
+
+                                        // 2. Atualizar disponibilidade do livro em livros.csv
+                                        List<String[]> livros = CsvHandler.lerDados("livros.csv");
+                                        for (int i = 0; i < livros.size(); i++) {
+                                            String[] livro2 = livros.get(i);
+                                            if (livro2.length > 1 && livro2[1].trim().equals(codigoLivro)) {
+                                                livro2[4] = "true"; // Atualiza a disponibilidade para true
+                                                livros.set(i, livro2);
+                                                break;
+                                            }
+                                        }
+                                        CsvHandler.escreverLinhas("livros.csv", livros);
+
+                                    // Exiba mensagem de sucesso
+                                    JOptionPane.showMessageDialog(null, "Devolução realizada com sucesso.\nMulta paga.");
+                                    // Recarregar a tabela com os livros atualizados
+                                    carregarLivros();
+
                                     } else {
                                         // Usuário optou por não pagar a multa, implemente a lógica apropriada
                                         // ...
                                     }
                                 } else {
-                                    // Exiba uma mensagem de devolução bem-sucedida
+                                    // Usuário concordou em pagar a multa
+                                        // 1. Excluir linha de empréstimo em emprestimos.csv
+                                        List<String[]> emprestimos_updt = CsvHandler.lerDados("emprestimos.csv");
+                                        for (int i = 0; i < emprestimos_updt.size(); i++) {
+                                            String[] emprestimo_updt = emprestimos_updt.get(i);
+                                            if (emprestimo_updt.length > 2 && emprestimo_updt[2].trim().equals(codigoLivro)) {
+                                                emprestimos_updt.remove(i);
+                                                break;
+                                            }
+                                        }
+                                        CsvHandler.escreverLinhas("emprestimos.csv", emprestimos_updt);
+
+                                        // 2. Atualizar disponibilidade do livro em livros.csv
+                                        List<String[]> livros = CsvHandler.lerDados("livros.csv");
+                                        for (int i = 0; i < livros.size(); i++) {
+                                            String[] livro2 = livros.get(i);
+                                            if (livro2.length > 1 && livro2[1].trim().equals(codigoLivro)) {
+                                                livro2[4] = "true"; // Atualiza a disponibilidade para true
+                                                livros.set(i, livro2);
+                                                break;
+                                            }
+                                        }
+                                        CsvHandler.escreverLinhas("livros.csv", livros);
+
+                                    // Exiba mensagem de sucesso
                                     JOptionPane.showMessageDialog(null, "Devolução realizada com sucesso.");
+                                    // Recarregar a tabela com os livros atualizados
+                                    carregarLivros();
                                 }
                                 break; // Saia do loop após encontrar a correspondência
                             }

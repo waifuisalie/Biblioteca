@@ -86,7 +86,7 @@ public class CsvHandler {
     }
     
 
-    private static void escreverLinhas(String nomeArquivo, List<String[]> linhas) {
+    public static void escreverLinhas(String nomeArquivo, List<String[]> linhas) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(nomeArquivo))) {
             writer.writeAll(linhas);
         } catch (IOException e) {
@@ -112,5 +112,4 @@ public class CsvHandler {
 
     return livros;
 }
-
 }
