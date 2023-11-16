@@ -64,9 +64,116 @@ public class DevolverLivroGUI extends JFrame {
         devolverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = resultadosTable.getSelectedRow();
+                realizarDevolucao();
+            }
+        });
+        
+        
+
+        devolucaoPanel.add(cancelarDevolucaoButton);
+        devolucaoPanel.add(devolverButton);
+        mainPanel.add(devolucaoPanel, BorderLayout.SOUTH);
+
+        add(mainPanel);
+
+        sorter = new TableRowSorter<>(tableModel);
+        resultadosTable.setRowSorter(sorter);
+    }
+
+    // Método auxiliar para criar a instância correta de Membro com base no tipo
+    private Membro criarMembro(String tipoMembro, String nomeMembro) {
+        switch (tipoMembro) {
+            case "Estudante":
+                return new MembroEstudante(nomeMembro,0 /* adicione o número do membro, se necessário */);
+            case "Regular":
+                return new MembroRegular(nomeMembro, 0/* adicione o número do membro, se necessário */);
+            case "Premium":
+                return new MembroPremium(nomeMembro, 0/* adicione o número do membro, se necessário */);
+            case "ProfessorBibliotecario":
+                return new MembroProfessorBibliotecario(nomeMembro, 0/* adicione o número do membro, se necessário */);
+            default:
+                // Lógica para lidar com tipos de membros desconhecidos ou inesperados
+                System.out.println("Tipo de membro desconhecido: " + tipoMembro);
+                return null;
+        }
+    }
+
+    private Livro obterLivroPorCodigo(String codigoLivro) {
+        // Carregar os dados dos empréstimos
+        List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+
+        // Iterar sobre as linhas para encontrar o livro com o código correspondente
+        for (String[] emprestimo : emprestimos) {
+            if (emprestimo.length > 2 && emprestimo[2].trim().equals(codigoLivro)) {
+                // O livro foi encontrado, retornar uma instância de Livro com base nos dados
+                String titulo = emprestimo[3].trim();
+                String autor = emprestimo[4].trim();
+                int ano = 0; // Certifique-se de ajustar a posição conforme necessário
+                // Outros dados do livro podem ser obtidos da linha do empréstimo
+
+                return new Livro(titulo, codigoLivro, autor, ano);
+            }
+        }
+
+        // Se não encontrar, retorne null ou lide com isso conforme necessário
+        return null;
+    }
+
+    
+    
+
+    private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
+        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
+            return CsvHandler.lerDados(nomeArquivo);
+        } else {
+            System.out.println("Arquivo não encontrado: " + nomeArquivo);
+            return List.of();
+        }
+    }
+
+    private void preencherTabela(List<String[]> dadosLivros, List<String[]> emprestimos, String nomeMembro) {
+        tableModel.setRowCount(0);
+
+        if (dadosLivros.isEmpty() || emprestimos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nenhum livro disponível para devolução.");
+            return;
+        }
+
+        String[] colunas = {"Título", "Código", "Autor", "Ano"};
+        tableModel.setColumnIdentifiers(colunas);
+
+        for (String[] emprestimo : emprestimos) {
+            // Verificar se o empréstimo pertence ao membro 
+            if (emprestimo.length >= 5 && emprestimo[1].trim().equalsIgnoreCase(nomeMembro)) {
+                // Procurar o livro correspondente
+                for (String[] livro : dadosLivros) {
+                    if (livro[1].equals(emprestimo[2])) {
+                        Object[] rowData = {livro[0], livro[1], livro[2], livro[3]};
+                        tableModel.addRow(rowData);
+                        break;
+                    }
+                }
+            }
+        }
+
+        sorter.setRowFilter(null); // Limpar qualquer filtro existente
+    }
+
+    private void carregarLivros() {
+        String nomeMembro = nomeMembroField.getText();
+        if (verificarExistenciaMembro(nomeMembro)) {
+            List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+            List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+            preencherTabela(dadosLivros, emprestimos, nomeMembro);
+        } else {
+            JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
+        }
+    }
+
+    // Implemente o método realizarDevolucao aqui
+    private void realizarDevolucao() {
+         int selectedRow = resultadosTable.getSelectedRow();
                 if (selectedRow != -1) {
-                    String titulo = (String) resultadosTable.getValueAt(selectedRow, 0);
                     String codigoLivro = ((String) resultadosTable.getValueAt(selectedRow, 1)).trim();
                     String nomeMembro = nomeMembroField.getText();  // Obtém o nome do membro do TextField
                     List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
@@ -179,117 +286,14 @@ public class DevolverLivroGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Dados de empréstimos ausentes ou formato incorreto.");
                 }
             }
-        });
         
         
+        
 
-        devolucaoPanel.add(cancelarDevolucaoButton);
-        devolucaoPanel.add(devolverButton);
-        mainPanel.add(devolucaoPanel, BorderLayout.SOUTH);
-
-        add(mainPanel);
-
-        sorter = new TableRowSorter<>(tableModel);
-        resultadosTable.setRowSorter(sorter);
-    }
-
-    // Método auxiliar para criar a instância correta de Membro com base no tipo
-    private Membro criarMembro(String tipoMembro, String nomeMembro) {
-        switch (tipoMembro) {
-            case "Estudante":
-                return new MembroEstudante(nomeMembro,0 /* adicione o número do membro, se necessário */);
-            case "Regular":
-                return new MembroRegular(nomeMembro, 0/* adicione o número do membro, se necessário */);
-            case "Premium":
-                return new MembroPremium(nomeMembro, 0/* adicione o número do membro, se necessário */);
-            case "ProfessorBibliotecario":
-                return new MembroProfessorBibliotecario(nomeMembro, 0/* adicione o número do membro, se necessário */);
-            default:
-                // Lógica para lidar com tipos de membros desconhecidos ou inesperados
-                System.out.println("Tipo de membro desconhecido: " + tipoMembro);
-                return null;
-        }
-    }
-
-    private Livro obterLivroPorCodigo(String codigoLivro) {
-        // Carregar os dados dos empréstimos
-        List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
-
-        // Iterar sobre as linhas para encontrar o livro com o código correspondente
-        for (String[] emprestimo : emprestimos) {
-            if (emprestimo.length > 2 && emprestimo[2].trim().equals(codigoLivro)) {
-                // O livro foi encontrado, retornar uma instância de Livro com base nos dados
-                String titulo = emprestimo[3].trim();
-                String autor = emprestimo[4].trim();
-                int ano = 0; // Certifique-se de ajustar a posição conforme necessário
-                // Outros dados do livro podem ser obtidos da linha do empréstimo
-
-                return new Livro(titulo, codigoLivro, autor, ano);
-            }
-        }
-
-        // Se não encontrar, retorne null ou lide com isso conforme necessário
-        return null;
-    }
-
-    
+        
     
 
-    private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
-        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
-            return CsvHandler.lerDados(nomeArquivo);
-        } else {
-            System.out.println("Arquivo não encontrado: " + nomeArquivo);
-            return List.of();
-        }
-    }
-
-    private void preencherTabela(List<String[]> dadosLivros, List<String[]> emprestimos, String nomeMembro) {
-        tableModel.setRowCount(0);
-
-        if (dadosLivros.isEmpty() || emprestimos.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nenhum livro disponível para devolução.");
-            return;
-        }
-
-        String[] colunas = {"Título", "Código", "Autor", "Ano"};
-        tableModel.setColumnIdentifiers(colunas);
-
-        for (String[] emprestimo : emprestimos) {
-            // Verificar se o empréstimo pertence ao membro 
-            if (emprestimo.length >= 5 && emprestimo[1].trim().equalsIgnoreCase(nomeMembro)) {
-                // Procurar o livro correspondente
-                for (String[] livro : dadosLivros) {
-                    if (livro[1].equals(emprestimo[2])) {
-                        Object[] rowData = {livro[0], livro[1], livro[2], livro[3]};
-                        tableModel.addRow(rowData);
-                        break;
-                    }
-                }
-            }
-        }
-
-        sorter.setRowFilter(null); // Limpar qualquer filtro existente
-    }
-
-    private void carregarLivros() {
-        String nomeMembro = nomeMembroField.getText();
-        if (verificarExistenciaMembro(nomeMembro)) {
-            List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
-            List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
-            preencherTabela(dadosLivros, emprestimos, nomeMembro);
-        } else {
-            JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
-        }
-    }
-
-    // Implemente o método realizarDevolucao aqui
-    private void realizarDevolucao(String titulo, String codigo) {
-        // Lógica de devolução do livro
-        // Atualizar o estado do livro para "disponível" no arquivo livros.csv
-        // Remover o registro de empréstimo do arquivo emprestimos.csv
-        // Mostrar mensagem de sucesso ou erro
-    }
+    
 
     private boolean verificarExistenciaMembro(String nomeMembro) {
         List<String[]> dadosMembros = verificarECarregarArquivoCSV("membros.csv");
