@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class MenuPrincipalGUI extends JFrame {
 
-    private static final String BACKGROUND_IMAGE_PATH = "/home/waifuisalie/Documents/biblioteca_try/sintomasMacaco.jpeg"; // Substitua pelo caminho da sua imagem
+    private static final String BACKGROUND_IMAGE_PATH = "/home/waifuisalie/Documents/biblioteca/biblioteca/src/main/java/com/biblioteca/biblioteca_sala_pucpr.jpg"; 
 
     public MenuPrincipalGUI() {
         // Configurações básicas da janela

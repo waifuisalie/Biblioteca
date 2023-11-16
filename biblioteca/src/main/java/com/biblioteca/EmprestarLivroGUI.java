@@ -91,7 +91,6 @@ public class EmprestarLivroGUI extends JFrame {
             }
         });
         
-
         cancelarEmprestimoButton = new JButton("Cancelar");
         cancelarEmprestimoButton.addActionListener(new ActionListener() {
             @Override

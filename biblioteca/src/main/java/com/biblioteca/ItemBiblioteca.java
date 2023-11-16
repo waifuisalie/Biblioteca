@@ -17,10 +17,6 @@ abstract class ItemBiblioteca {
     public String getCodigo() {
         return codigo;
     }
-
-    // Métodos abstratos
-    public abstract void emprestar();
-    public abstract void devolver();
 }
 
 

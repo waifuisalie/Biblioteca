@@ -111,25 +111,11 @@ public class CsvHandler {
             Integer.parseInt(linha[3])  // Ano
             );
         livro.setDisponivel(Boolean.parseBoolean(linha[4]));
-        
         livros.add(livro);
-    }
-
-    return livros;
-}
-    /*private static void criarArquivoSeNecessario(String nomeArquivo) {
-        Path path = Paths.get(nomeArquivo);
-        if (!Files.exists(path)) {
-            try {
-                Files.createDirectories(path.getParent());
-                Files.createFile(path);
-                System.out.println("Arquivo criado com sucesso.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Erro ao criar o arquivo.");
-            }
         }
-    }*/
+
+        return livros;
+    }
     public static List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
         if (verificarExistenciaArquivo(nomeArquivo)) {
             return lerDados(nomeArquivo);

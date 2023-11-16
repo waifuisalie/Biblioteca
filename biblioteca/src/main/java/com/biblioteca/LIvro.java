@@ -50,12 +50,6 @@ class Livro extends ItemBiblioteca {
     }
 
     @Override
-    public void devolver() {
-        System.out.println("Livro devolvido: " + getTitulo());
-        setDisponivel(true);
-    }
-
-    @Override
     public String toString() {
         return "Livro{" +
                 "titulo='" + getTitulo() + '\'' +
