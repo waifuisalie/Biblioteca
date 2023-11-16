@@ -63,22 +63,4 @@ public class Emprestimo {
             return List.of();
         }
     }
-
-    // Método auxiliar para criar a instância correta de Membro com base no tipo
-    private Membro criarMembro(String tipoMembro, String nomeMembro, int codMembro) {
-        switch (tipoMembro) {
-            case "Estudante":
-                return new MembroEstudante(nomeMembro, codMembro /* adicione o número do membro, se necessário */);
-            case "Regular":
-                return new MembroRegular(nomeMembro, codMembro/* adicione o número do membro, se necessário */);
-            case "Premium":
-                return new MembroPremium(nomeMembro, codMembro/* adicione o número do membro, se necessário */);
-            case "Professor/Bibliotecário":
-                return new MembroProfessorBibliotecario(nomeMembro,codMembro /* adicione o número do membro, se necessário */);
-            default:
-                // Lógica para lidar com tipos de membros desconhecidos ou inesperados
-                System.out.println("Tipo de membro desconhecido: " + tipoMembro);
-                return null;
-        }
-    }
 }
