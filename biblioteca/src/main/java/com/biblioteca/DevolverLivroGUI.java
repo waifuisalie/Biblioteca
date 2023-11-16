@@ -91,16 +91,26 @@ public class DevolverLivroGUI extends JFrame {
                                 System.out.println(diasAtraso);
         
                                 // Verifique os dias de atraso
-                                if (diasAtraso > 0) {
-                                    // Exiba uma mensagem sobre o atraso
-                                    JOptionPane.showMessageDialog(null, "Devolução com atraso de " + diasAtraso);
-        
+                                if (diasAtraso > 0) {        
                                     // Crie uma instância de Emprestimo
                                     Emprestimo emprestimoObj = new Emprestimo(membro, livro, dataDevolucao);
                                     
                                     // Implemente lógica para calcular multa.
                                     double multa = ((CalculaMulta) membro).calcularMulta(emprestimoObj);
-                                    System.out.println("Multa: " + multa);
+
+                                    String mensagem = "Devolução com atraso de " + diasAtraso + " dias.\nMulta a ser paga: " + multa;
+
+                                    // Implemente lógica para mostrar um JOptionPane personalizado com a multa
+                                    int escolha = JOptionPane.showConfirmDialog(null, mensagem + "\nVocê concorda em pagar a multa?", "Aviso", JOptionPane.YES_NO_OPTION);
+
+                                    // Verifique a escolha do usuário
+                                    if (escolha == JOptionPane.YES_OPTION) {
+                                        // Usuário concordou em pagar a multa, implemente a lógica apropriada
+                                        // ...
+                                    } else {
+                                        // Usuário optou por não pagar a multa, implemente a lógica apropriada
+                                        // ...
+                                    }
                                 } else {
                                     // Exiba uma mensagem de devolução bem-sucedida
                                     JOptionPane.showMessageDialog(null, "Devolução realizada com sucesso.");
