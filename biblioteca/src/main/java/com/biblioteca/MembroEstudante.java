@@ -1,9 +1,6 @@
 package com.biblioteca;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-public class MembroEstudante extends Membro implements CalculaMulta {
+public class MembroEstudante extends Membro { // implements CalculaMulta seria redundante 
     private int limiteEmprestimos;
     private int periodoEmprestimoDias;
     private double precoMulta;

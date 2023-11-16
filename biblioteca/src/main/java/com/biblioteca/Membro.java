@@ -1,16 +1,12 @@
 package com.biblioteca;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Membro extends Pessoa implements CalculaMulta {
     private int numeroMembro;
-    private List<Emprestimo> historicoEmprestimos;
 
     public Membro(String nome, int numeroMembro) {
         super(nome);
         this.numeroMembro = numeroMembro;
-        this.historicoEmprestimos = new ArrayList<>();
     }
 
     public int getNumeroMembro() {

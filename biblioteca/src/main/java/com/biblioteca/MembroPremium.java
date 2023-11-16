@@ -1,6 +1,6 @@
 package com.biblioteca;
 
-public class MembroPremium extends Membro implements CalculaMulta {
+public class MembroPremium extends Membro {
     private int limiteEmprestimos;
     private int periodoEmprestimoDias;
     private double precoMulta;
