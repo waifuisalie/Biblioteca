@@ -68,8 +68,6 @@ public class CadastroMembroGUI extends JFrame {
                 // Criar instância do membro correspondente ao tipo selecionado
                 Membro membro = criarMembro(nome, numeroMembro, tipoMembro);
 
-                // Realizar o cadastro ou qualquer outra lógica necessária
-                // ...
                 // Verificar e criar o arquivo CSV de membros
                 VerificadorArquivo.verificarECriarArquivoCSV("membros.csv");
 

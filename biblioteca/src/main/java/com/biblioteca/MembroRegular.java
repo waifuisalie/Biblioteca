@@ -3,11 +3,14 @@ package com.biblioteca;
 public class MembroRegular extends Membro {
     private int limiteEmprestimos;
     private int periodoEmprestimoDias;
+    private double precoMulta;
+
 
     public MembroRegular(String nome, int numeroMembro) {
         super(nome, numeroMembro);
         this.limiteEmprestimos = 3;
         this.periodoEmprestimoDias = 14;
+        this.precoMulta = 1.0;
     }
 
     public int getLimiteEmprestimos() {
@@ -18,26 +21,18 @@ public class MembroRegular extends Membro {
         return periodoEmprestimoDias;
     }
 
-    @Override
-    public double calcularMulta(Emprestimo emprestimo) {
-        // Lógica para calcular a multa para membros Professor/Bibliotecário
-        // Use a diferença entre a data atual e a data de devolução para calcular os dias de atraso
-        int diasAtraso = calcularDiasAtraso(emprestimo.getDataDevolucao());
-
-        if (diasAtraso > 0) {
-            // Lógica para calcular a multa específica para membros Professor/Bibliotecário
-            // Implemente conforme necessário
-            return diasAtraso * 1.0; // Valor padrão, ajuste conforme necessário
-        } else {
-            return 0.0; // Sem multa se não houver atraso
-        }
+    public double getPrecoMulta() {
+        return precoMulta;
     }
 
-    // Implemente o método calcularDiasAtraso aqui
-    private int calcularDiasAtraso(String dataDevolucao) {
-        // Lógica para calcular a diferença em dias entre a data atual e a data de devolução
-        // Implemente conforme necessário
-        // Retorna a diferença em dias
-        return 0;
+    public void setPrecoMulta(double precoMulta) {
+        this.precoMulta = precoMulta;
+    }
+
+@Override
+    public double calcularMulta(Emprestimo emprestimo) {
+        String dataDevolucao = emprestimo.getDataDevolucao();
+        int diasAtraso = CalculadoraDiasAtraso.calcularDiasAtraso(dataDevolucao);
+        return diasAtraso * getPrecoMulta();
     }
 }

@@ -64,20 +64,61 @@ public class DevolverLivroGUI extends JFrame {
         devolverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implemente a lógica de devolução aqui
                 int selectedRow = resultadosTable.getSelectedRow();
                 if (selectedRow != -1) {
-                    // Obter os dados do livro selecionado
                     String titulo = (String) resultadosTable.getValueAt(selectedRow, 0);
-                    String codigo = (String) resultadosTable.getValueAt(selectedRow, 1);
-
-                    // Agora você tem os dados do livro selecionado, e pode prosseguir com a lógica de devolução.
-                    realizarDevolucao(titulo, codigo);
+                    String codigoLivro = ((String) resultadosTable.getValueAt(selectedRow, 1)).trim();
+                    String nomeMembro = nomeMembroField.getText();  // Obtém o nome do membro do TextField
+                    List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+        
+                    // Certifique-se de que a lista não está vazia e tem dados suficientes
+                    if (!emprestimos.isEmpty() && emprestimos.get(0).length > 5) {
+                        // Iterar sobre as linhas para encontrar o livro
+                        for (String[] emprestimo : emprestimos) {
+                            if (emprestimo.length > 2 && emprestimo[2].trim().equals(codigoLivro)) {
+                                // A linha foi encontrada, agora podemos obter a data de devolução
+                                String dataDevolucao = emprestimo[5].trim();
+                                String tipoMembro = emprestimo[0].trim();
+        
+                                // Crie uma instância de Membro com base no tipo
+                                Membro membro = criarMembro(tipoMembro, nomeMembro);
+        
+                                // Crie uma instância de Livro com base no código
+                                Livro livro = obterLivroPorCodigo(codigoLivro); // Você precisa implementar esse método
+        
+                                // Continue com a lógica de dias de atraso e multa
+                                int diasAtraso = CalculadoraDiasAtraso.calcularDiasAtraso(dataDevolucao);
+                                System.out.println(diasAtraso);
+        
+                                // Verifique os dias de atraso
+                                if (diasAtraso > 0) {
+                                    // Exiba uma mensagem sobre o atraso
+                                    JOptionPane.showMessageDialog(null, "Devolução com atraso de " + diasAtraso);
+        
+                                    // Crie uma instância de Emprestimo
+                                    Emprestimo emprestimoObj = new Emprestimo(membro, livro, dataDevolucao);
+                                    
+                                    // Implemente lógica para calcular multa.
+                                    double multa = ((CalculaMulta) membro).calcularMulta(emprestimoObj);
+                                    System.out.println("Multa: " + multa);
+                                } else {
+                                    // Exiba uma mensagem de devolução bem-sucedida
+                                    JOptionPane.showMessageDialog(null, "Devolução realizada com sucesso.");
+                                }
+                                break; // Saia do loop após encontrar a correspondência
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nenhum livro selecionado para devolução.");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nenhum livro selecionado para devolução.");
+                    // Lógica para lidar com a falta de dados
+                    JOptionPane.showMessageDialog(null, "Dados de empréstimos ausentes ou formato incorreto.");
                 }
             }
         });
+        
+        
 
         devolucaoPanel.add(cancelarDevolucaoButton);
         devolucaoPanel.add(devolverButton);
@@ -88,6 +129,48 @@ public class DevolverLivroGUI extends JFrame {
         sorter = new TableRowSorter<>(tableModel);
         resultadosTable.setRowSorter(sorter);
     }
+
+    // Método auxiliar para criar a instância correta de Membro com base no tipo
+    private Membro criarMembro(String tipoMembro, String nomeMembro) {
+        switch (tipoMembro) {
+            case "Estudante":
+                return new MembroEstudante(nomeMembro,0 /* adicione o número do membro, se necessário */);
+            case "Regular":
+                return new MembroRegular(nomeMembro, 0/* adicione o número do membro, se necessário */);
+            case "Premium":
+                return new MembroPremium(nomeMembro, 0/* adicione o número do membro, se necessário */);
+            case "ProfessorBibliotecario":
+                return new MembroProfessorBibliotecario(nomeMembro, 0/* adicione o número do membro, se necessário */);
+            default:
+                // Lógica para lidar com tipos de membros desconhecidos ou inesperados
+                System.out.println("Tipo de membro desconhecido: " + tipoMembro);
+                return null;
+        }
+    }
+
+    private Livro obterLivroPorCodigo(String codigoLivro) {
+        // Carregar os dados dos empréstimos
+        List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+
+        // Iterar sobre as linhas para encontrar o livro com o código correspondente
+        for (String[] emprestimo : emprestimos) {
+            if (emprestimo.length > 2 && emprestimo[2].trim().equals(codigoLivro)) {
+                // O livro foi encontrado, retornar uma instância de Livro com base nos dados
+                String titulo = emprestimo[3].trim();
+                String autor = emprestimo[4].trim();
+                int ano = 0; // Certifique-se de ajustar a posição conforme necessário
+                // Outros dados do livro podem ser obtidos da linha do empréstimo
+
+                return new Livro(titulo, codigoLivro, autor, ano);
+            }
+        }
+
+        // Se não encontrar, retorne null ou lide com isso conforme necessário
+        return null;
+    }
+
+    
+    
 
     private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
         if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
@@ -155,6 +238,8 @@ public class DevolverLivroGUI extends JFrame {
         }
         return false; // Membro não encontrado
     }
+    
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

@@ -193,28 +193,28 @@ public class EmprestarLivroGUI extends JFrame {
     }
 
     // Dentro do método realizarEmprestimo, após adicionar o empréstimo ao CSV
-private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
-    String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
+    private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
+        String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
 
-    // Verificar a existência do membro
-    if (verificarExistenciaMembro(nomeMembro)) {
-        // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
-        String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
-        adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao, codigo);
+        // Verificar a existência do membro
+        if (verificarExistenciaMembro(nomeMembro)) {
+            // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
+            String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
+            adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao, codigo);
 
-        // Atualizar a disponibilidade do livro para "false" no arquivo livros.csv
-        String chaveLivro = codigo; // Você pode ajustar a chave conforme necessário
-        String novaLinhaLivro = String.format("%s, %s, %s, %s, false", titulo, codigo, autor, ano);
-        CsvHandler.atualizarLinha("livros.csv", chaveLivro, novaLinhaLivro);
+            // Atualizar a disponibilidade do livro para "false" no arquivo livros.csv
+            String chaveLivro = codigo; // Você pode ajustar a chave conforme necessário
+            String novaLinhaLivro = String.format("%s, %s, %s, %s, false", titulo, codigo, autor, ano);
+            CsvHandler.atualizarLinha("livros.csv", chaveLivro, novaLinhaLivro);
 
-        JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
+            JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
 
-        // update table 
-        mostrarTodosLivros();
-    } else {
-        JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
+            // update table 
+            mostrarTodosLivros();
+        } else {
+            JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
+        }
     }
-}
 
 
     private void adicionarEmprestimoAoCSV(String nomeMembro, String tituloLivro, String dataDevolucao, String codigo) {

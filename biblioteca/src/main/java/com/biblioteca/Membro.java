@@ -3,9 +3,8 @@ package com.biblioteca;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Membro extends Pessoa implements CalculaMulta{
+public abstract class Membro extends Pessoa implements CalculaMulta {
     private int numeroMembro;
-    private String tipo;
     private List<Emprestimo> historicoEmprestimos;
 
     public Membro(String nome, int numeroMembro) {
@@ -34,4 +33,7 @@ public abstract class Membro extends Pessoa implements CalculaMulta{
                 ", numeroMembro=" + numeroMembro +
                 '}';
     }
+
+    // Método abstrato para calcular a multa
+    public abstract double calcularMulta(Emprestimo emprestimo);
 }

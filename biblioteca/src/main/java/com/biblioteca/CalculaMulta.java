@@ -1,4 +1,4 @@
-// Interface CalculaMulta.java
+// CalculaMulta.java
 package com.biblioteca;
 
 public interface CalculaMulta {

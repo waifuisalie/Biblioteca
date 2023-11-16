@@ -20,6 +20,7 @@ class Livro extends ItemBiblioteca {
         return autor;
     }
 
+
     public int getAno() {
         return ano;
     }
@@ -69,4 +70,26 @@ class Livro extends ItemBiblioteca {
         dados.add(new String[]{getTitulo(), getCodigo(), autor, Integer.toString(ano), Boolean.toString(disponivel)});
         return dados;
     }
+
+    private static List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
+        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
+            return CsvHandler.lerDados(nomeArquivo);
+        } else {
+            System.out.println("Arquivo não encontrado: " + nomeArquivo);
+            return List.of();
+        }
+    }
+
+    public static Livro obterLivroPorCodigo(String codigo) {
+    List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+
+    for (String[] livro : dadosLivros) {
+        if (livro.length >= 2 && livro[1].trim().equalsIgnoreCase(codigo)) {
+            return new Livro(livro[0].trim(), livro[1].trim(), livro[2].trim(), Integer.parseInt(livro[3].trim()));
+        }
+    }
+
+    return null; // Retorna null se o livro não for encontrado
+}
+
 }
