@@ -59,8 +59,8 @@ public class CadastroMembroGUI extends JFrame {
                 String tipoMembro = (String) tipoMembroComboBox.getSelectedItem();
 
                 // Verificar se o membro com o mesmo número já está cadastrado
-                if (VerificadorArquivo.verificarExistenciaArquivo("membros.csv") &&
-                    VerificadorExistencia.registroJaCadastrado("membros.csv", 1, Integer.toString(numeroMembro))) {
+                if (CsvHandler.verificarExistenciaArquivo("membros.csv") &&
+                    CsvHandler.registroJaCadastrado("membros.csv", 1, Integer.toString(numeroMembro))) {
                     JOptionPane.showMessageDialog(null, "Membro com o mesmo número já cadastrado!");
                     return;
                 }
@@ -69,7 +69,7 @@ public class CadastroMembroGUI extends JFrame {
                 Membro membro = criarMembro(nome, numeroMembro, tipoMembro);
 
                 // Verificar e criar o arquivo CSV de membros
-                VerificadorArquivo.verificarECriarArquivoCSV("membros.csv");
+                CsvHandler.verificarECriarArquivoCSV("membros.csv");
 
 
                 // Exibir mensagem de sucesso

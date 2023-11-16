@@ -52,7 +52,7 @@ public class BuscaLivroGUI extends JFrame {
                 String termoBusca = buscaField.getText();
 
                 // Verificar e criar o arquivo CSV de livros, se necessário
-                VerificadorArquivo.verificarECriarArquivoCSV("livros.csv");
+                CsvHandler.verificarECriarArquivoCSV("livros.csv");
 
                 // Realizar a busca no arquivo CSV
                 List<String[]> dadosLivros = CsvHandler.lerDados("livros.csv");

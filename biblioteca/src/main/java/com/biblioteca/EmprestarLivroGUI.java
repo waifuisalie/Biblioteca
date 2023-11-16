@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 
 public class EmprestarLivroGUI extends JFrame {
@@ -47,7 +46,7 @@ public class EmprestarLivroGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String termoBusca = termoBuscaField.getText();
                 String criterioBusca = (String) criterioBuscaComboBox.getSelectedItem();
-                List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+                List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
                 preencherTabela(dadosLivros, termoBusca, criterioBusca);
             }
         });
@@ -114,7 +113,7 @@ public class EmprestarLivroGUI extends JFrame {
 
         add(mainPanel);
 
-        List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+        List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
         preencherTabela(dadosLivros, "", "");
 
         sorter = new TableRowSorter<>(tableModel);
@@ -126,14 +125,7 @@ public class EmprestarLivroGUI extends JFrame {
         cancelarEmprestimoButton.setEnabled(visivel);
     }
 
-    private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
-        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
-            return CsvHandler.lerDados(nomeArquivo);
-        } else {
-            System.out.println("Arquivo não encontrado: " + nomeArquivo);
-            return Collections.emptyList();
-        }
-    }
+    
 
     private void preencherTabela(List<String[]> dados, String termoBusca, String criterioBusca) {
         tableModel.setRowCount(0);
@@ -182,7 +174,7 @@ public class EmprestarLivroGUI extends JFrame {
     
 
     private void mostrarTodosLivros() {
-        List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+        List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
         preencherTabela(dadosLivros, "", "");
     
         // Limpar o filtro existente
@@ -240,7 +232,7 @@ public class EmprestarLivroGUI extends JFrame {
     
 
     private boolean verificarExistenciaMembro(String nomeMembro) {
-        List<String[]> dadosMembros = verificarECarregarArquivoCSV("membros.csv");
+        List<String[]> dadosMembros = CsvHandler.verificarECarregarArquivoCSV("membros.csv");
     
         for (String[] membro : dadosMembros) {
             if (membro[0].equalsIgnoreCase(nomeMembro)) {

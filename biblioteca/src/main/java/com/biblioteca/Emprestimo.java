@@ -42,7 +42,7 @@ public class Emprestimo {
 
     // Método para carregar a data de devolução do arquivo CSV
     public void carregarDataDevolucao() {
-        List<String[]> emprestimos = verificarECarregarArquivoCSV("emprestimos.csv");
+        List<String[]> emprestimos = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
 
         // Verificar se há empréstimos correspondentes e definir a data de devolução
         for (String[] emprestimo : emprestimos) {
@@ -54,13 +54,5 @@ public class Emprestimo {
         }
     }
 
-    // Método auxiliar para carregar dados do arquivo CSV
-    private List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
-        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
-            return CsvHandler.lerDados(nomeArquivo);
-        } else {
-            System.out.println("Arquivo não encontrado: " + nomeArquivo);
-            return List.of();
-        }
-    }
+
 }

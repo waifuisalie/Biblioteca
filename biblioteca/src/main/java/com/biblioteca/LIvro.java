@@ -71,17 +71,9 @@ class Livro extends ItemBiblioteca {
         return dados;
     }
 
-    private static List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
-        if (VerificadorArquivo.verificarExistenciaArquivo(nomeArquivo)) {
-            return CsvHandler.lerDados(nomeArquivo);
-        } else {
-            System.out.println("Arquivo não encontrado: " + nomeArquivo);
-            return List.of();
-        }
-    }
 
     public static Livro obterLivroPorCodigo(String codigo) {
-    List<String[]> dadosLivros = verificarECarregarArquivoCSV("livros.csv");
+    List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
 
     for (String[] livro : dadosLivros) {
         if (livro.length >= 2 && livro[1].trim().equalsIgnoreCase(codigo)) {

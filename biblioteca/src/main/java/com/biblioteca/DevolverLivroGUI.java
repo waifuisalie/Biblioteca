@@ -89,7 +89,7 @@ public class DevolverLivroGUI extends JFrame {
                 return new MembroRegular(nomeMembro, 0/* adicione o número do membro, se necessário */);
             case "Premium":
                 return new MembroPremium(nomeMembro, 0/* adicione o número do membro, se necessário */);
-            case "ProfessorBibliotecario":
+            case "Professor/Bibliotecário":
                 return new MembroProfessorBibliotecario(nomeMembro, 0/* adicione o número do membro, se necessário */);
             default:
                 // Lógica para lidar com tipos de membros desconhecidos ou inesperados
@@ -100,7 +100,7 @@ public class DevolverLivroGUI extends JFrame {
 
     private Livro obterLivroPorCodigo(String codigoLivro) {
         // Carregar os dados dos empréstimos
-        List<String[]> emprestimos = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
+        List<String[]> emprestimos = CsvHandler.lerDados("emprestimos.csv");
 
         // Iterar sobre as linhas para encontrar o livro com o código correspondente
         for (String[] emprestimo : emprestimos) {
@@ -215,7 +215,7 @@ public class DevolverLivroGUI extends JFrame {
                                         CsvHandler.escreverLinhas("emprestimos.csv", emprestimos_updt);
 
                                         // 2. Atualizar disponibilidade do livro em livros.csv
-                                        List<String[]> livros = CsvHandler.lerDados("livros.csv");
+                                        List<String[]> livros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
                                         for (int i = 0; i < livros.size(); i++) {
                                             String[] livro2 = livros.get(i);
                                             if (livro2.length > 1 && livro2[1].trim().equals(codigoLivro)) {
@@ -238,7 +238,7 @@ public class DevolverLivroGUI extends JFrame {
                                 } else {
                                     // Usuário concordou em pagar a multa
                                         // 1. Excluir linha de empréstimo em emprestimos.csv
-                                        List<String[]> emprestimos_updt = CsvHandler.lerDados("emprestimos.csv");
+                                        List<String[]> emprestimos_updt = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
                                         for (int i = 0; i < emprestimos_updt.size(); i++) {
                                             String[] emprestimo_updt = emprestimos_updt.get(i);
                                             if (emprestimo_updt.length > 2 && emprestimo_updt[2].trim().equals(codigoLivro)) {
@@ -249,7 +249,7 @@ public class DevolverLivroGUI extends JFrame {
                                         CsvHandler.escreverLinhas("emprestimos.csv", emprestimos_updt);
 
                                         // 2. Atualizar disponibilidade do livro em livros.csv
-                                        List<String[]> livros = CsvHandler.lerDados("livros.csv");
+                                        List<String[]> livros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
                                         for (int i = 0; i < livros.size(); i++) {
                                             String[] livro2 = livros.get(i);
                                             if (livro2.length > 1 && livro2[1].trim().equals(codigoLivro)) {
@@ -286,7 +286,7 @@ public class DevolverLivroGUI extends JFrame {
     
 
     private boolean verificarExistenciaMembro(String nomeMembro) {
-        List<String[]> dadosMembros = CsvHandler.verificarECarregarArquivoCSV("membros.csv");
+        List<String[]> dadosMembros = CsvHandler.lerDados("membros.csv");
     
         for (String[] membro : dadosMembros) {
             if (membro[0].equalsIgnoreCase(nomeMembro)) {
