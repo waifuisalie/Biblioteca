@@ -5,6 +5,7 @@ abstract class ItemBiblioteca {
     private String titulo;
     private String codigo;
 
+    // inicializa 
     public ItemBiblioteca(String titulo, String codigo) {
         this.titulo = titulo;
         this.codigo = codigo;

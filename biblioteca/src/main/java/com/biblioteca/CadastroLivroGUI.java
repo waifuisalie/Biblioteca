@@ -15,11 +15,11 @@ public class CadastroLivroGUI extends JFrame {
         setSize(400, 300);
         setLocationRelativeTo(null);
 
-        // Crie um painel para adicionar componentes
+        // Criando um painel para adicionar componentes
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(6, 2));
 
-        // Adicione componentes para o formulário de cadastro de livro
+        // Adicionando componentes para o formulário de cadastro de livro
         JLabel tituloLabel = new JLabel("Título:");
         JTextField tituloField = new JTextField();
 
@@ -35,7 +35,7 @@ public class CadastroLivroGUI extends JFrame {
         JButton cadastrarButton = new JButton("Cadastrar");
         JButton cancelarButton = new JButton("Cancelar");
 
-        // Adicione os componentes ao painel
+        // Adicionando os componentes ao painel
         panel.add(tituloLabel);
         panel.add(tituloField);
         panel.add(codigoLabel);
@@ -47,7 +47,7 @@ public class CadastroLivroGUI extends JFrame {
         panel.add(cancelarButton);
         panel.add(cadastrarButton);
 
-        // Adicione o painel à janela
+        // Adicioneando o painel à janela
         add(panel);
 
         // Configure a ação do botão "Cadastrar"

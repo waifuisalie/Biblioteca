@@ -13,15 +13,18 @@ public abstract class Membro extends Pessoa implements CalculaMulta {
         return numeroMembro;
     }
 
+    // implementação do método cadastrar da classe Pessoa
     @Override
     public void cadastrar() {
         System.out.println("Membro cadastrado: " + getNome());
     }
 
+    // método para representar o objeto como uma string CSV
     public String toCsvString() {
         return getNome() + "," + numeroMembro;
     }
 
+    // método toStrinf para fornecer uma representação de string do objeto
     @Override
     public String toString() {
         return "Membro{" +

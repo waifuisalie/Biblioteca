@@ -1,24 +1,12 @@
 package com.biblioteca;
 
 public class MembroProfessorBibliotecario extends Membro {
-    private int limiteEmprestimos;
-    private int periodoEmprestimoDias;
     private double precoMulta;
 
 
     public MembroProfessorBibliotecario(String nome, int numeroMembro) {
         super(nome, numeroMembro);
-        this.limiteEmprestimos = 7;
-        this.periodoEmprestimoDias = 30;
         this.precoMulta = 0.7;
-    }
-
-    public int getLimiteEmprestimos() {
-        return limiteEmprestimos;
-    }
-
-    public int getPeriodoEmprestimoDias() {
-        return periodoEmprestimoDias;
     }
 
     public double getPrecoMulta() {

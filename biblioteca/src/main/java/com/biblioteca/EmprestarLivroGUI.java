@@ -103,6 +103,7 @@ public class EmprestarLivroGUI extends JFrame {
         emprestimoPanel.add(emprestarButton);
         mainPanel.add(emprestimoPanel, BorderLayout.SOUTH);
 
+        // resultados da tabela
         resultadosTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -119,25 +120,31 @@ public class EmprestarLivroGUI extends JFrame {
         resultadosTable.setRowSorter(sorter);
     }
 
+    // botões devem ficar visíveis
     private void setBotoesVisiveis(boolean visivel) {
         emprestarButton.setEnabled(visivel);
         cancelarEmprestimoButton.setEnabled(visivel);
     }
 
     
-
+    // método para preencher a tabela
     private void preencherTabela(List<String[]> dados, String termoBusca, String criterioBusca) {
+        // limpa todsa as linhas da tabela
         tableModel.setRowCount(0);
     
+        // verifica se não há dados disponíveis
         if (dados == null || dados.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nenhum livro disponível.");
             return;
         }
     
+        // define as colunas da tabela
         String[] colunas = {"Título", "Código", "Autor", "Ano"};
         tableModel.setColumnIdentifiers(colunas);
     
+        // itera sobre os dados dos livros
         for (String[] livro : dados) {
+            // disponivel recebe true ou false 
             boolean disponivel = livro.length > 4 && "true".equalsIgnoreCase(livro[4]);
     
             // Verificar se o livro está disponível
@@ -147,9 +154,11 @@ public class EmprestarLivroGUI extends JFrame {
             }
         }
     
+        // verifica se há termo de busca e critério de busca fornecidos
         if (!termoBusca.isEmpty() && criterioBusca != null) {
             int colunaIndex = -1;
-    
+
+            // identifica o índice da coluna com base no critério de busca
             switch (criterioBusca.toLowerCase()) {
                 case "título":
                     colunaIndex = 0;
@@ -164,14 +173,17 @@ public class EmprestarLivroGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Critério de busca inválido.");
                     return;
             }
-    
+            
+            // cria um filtro de linha para a tabela com base no termo de busca
             RowFilter<Object, Object> rowFilter = RowFilter.regexFilter("(?i)" + termoBusca, colunaIndex);
             sorter.setRowFilter(rowFilter);
+
+            // atualiza a exibição na tela
             mainPanel.revalidate();
         }
     }
     
-
+    // método para mostrar os livros
     private void mostrarTodosLivros() {
         List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
         preencherTabela(dadosLivros, "", "");
@@ -179,33 +191,36 @@ public class EmprestarLivroGUI extends JFrame {
         // Limpar o filtro existente
         sorter.setRowFilter(null);
     
+        // limpa campos de busca
         termoBuscaField.setText("");
         criterioBuscaComboBox.setSelectedIndex(0);
     }
 
+    // método que realiza o empréstimo
     private void realizarEmprestimo(String titulo, String codigo, String autor, String ano) {
         String nomeMembro = JOptionPane.showInputDialog("Digite o nome do membro:");
 
         // Verificar a existência do membro
         if (verificarExistenciaMembro(nomeMembro)) {
-            // Adicione os dados do empréstimo ao arquivo CSV de empréstimos
+
+            // Adicionar os dados do empréstimo ao arquivo CSV de empréstimos
             String dataDevolucao = JOptionPane.showInputDialog("Digite a data de devolução:");
             adicionarEmprestimoAoCSV(nomeMembro, titulo, dataDevolucao, codigo);
 
             // Atualizar a disponibilidade do livro para "false" no arquivo livros.csv
-            String chaveLivro = codigo; // Você pode ajustar a chave conforme necessário
+            String chaveLivro = codigo; 
             String novaLinhaLivro = String.format("%s, %s, %s, %s, false", titulo, codigo, autor, ano);
             CsvHandler.atualizarLinha("livros.csv", chaveLivro, novaLinhaLivro);
 
             JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
 
-            // update table 
+            // atualizar a tabela com livros disponíveis
             mostrarTodosLivros();
         } else {
+            // mensagem caso membro não seja encontrado
             JOptionPane.showMessageDialog(null, "Membro não encontrado. Empréstimo não realizado.");
         }
     }
-
 
     private void adicionarEmprestimoAoCSV(String nomeMembro, String tituloLivro, String dataDevolucao, String codigo) {
         // Construir a linha de empréstimo
@@ -217,6 +232,7 @@ public class EmprestarLivroGUI extends JFrame {
         CsvHandler.escreverLinha("emprestimos.csv", emprestimo);
     }
 
+    // apenas para obter data
     private String obterDataAtual() {
         // Obtém a data atual
         LocalDate dataAtual = LocalDate.now();
@@ -228,8 +244,6 @@ public class EmprestarLivroGUI extends JFrame {
         return dataFormatada;
     }
     
-    
-
     private boolean verificarExistenciaMembro(String nomeMembro) {
         List<String[]> dadosMembros = CsvHandler.verificarECarregarArquivoCSV("membros.csv");
     

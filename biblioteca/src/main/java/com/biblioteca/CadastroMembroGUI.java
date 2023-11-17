@@ -16,11 +16,11 @@ public class CadastroMembroGUI extends JFrame {
         setSize(400, 300);
         setLocationRelativeTo(null);
 
-        // Crie um painel para adicionar componentes
+        // Criando um painel para adicionar componentes
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(6, 2));
 
-        // Adicione componentes para o formulário de cadastro de membro
+        // Adicionando componentes para o formulário de cadastro de membro
         JLabel nomeLabel = new JLabel("Nome:");
         JTextField nomeField = new JTextField();
 
@@ -34,7 +34,7 @@ public class CadastroMembroGUI extends JFrame {
 
         JButton cancelarButton = new JButton("Cancelar");
 
-        // Adicione os componentes ao painel
+        // Adicionando os componentes ao painel
         panel.add(nomeLabel);
         panel.add(nomeField);
         panel.add(numeroMembroLabel);
@@ -46,7 +46,7 @@ public class CadastroMembroGUI extends JFrame {
         panel.add(cancelarButton);
         panel.add(cadastrarButton);
 
-        // Adicione o painel à janela
+        // Adicionando o painel à janela
         add(panel);
 
         // Configure a ação do botão "Cadastrar"
@@ -104,7 +104,7 @@ public class CadastroMembroGUI extends JFrame {
         return dados;
     }
     
-
+    // método que cria uma instância adequada de Membro com base no tipo selecionado
     private Membro criarMembro(String nome, int numeroMembro, String tipoMembro) {
         switch (tipoMembro) {
             case "Regular":

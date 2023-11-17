@@ -11,7 +11,6 @@ abstract class Pessoa {
     public String getNome() {
         return nome;
     }
-
     // Método abstrato
     public abstract void cadastrar();
 }

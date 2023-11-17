@@ -9,17 +9,17 @@ import java.util.List;
 public class BuscaLivroGUI extends JFrame {
 
     public BuscaLivroGUI() {
-        // Configurações básicas da janela
+        // configuração da janela
         setTitle("Buscar Livro");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null);
 
-        // Crie um painel para adicionar componentes
+        // Criando painel
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2));
 
-        // Adicione componentes para o formulário de busca de livro
+        // Adicionando componentes para o formulário de busca de livro
         JLabel tipoBuscaLabel = new JLabel("Tipo de Busca:");
         JComboBox<String> tipoBuscaComboBox = new JComboBox<>(new String[]{"Título", "Código", "Autor"});
 
@@ -28,7 +28,7 @@ public class BuscaLivroGUI extends JFrame {
 
         JButton buscarButton = new JButton("Buscar");
 
-        // Adicione os componentes ao painel
+        // adicionando componentes ao painel
         panel.add(tipoBuscaLabel);
         panel.add(tipoBuscaComboBox);
         panel.add(buscaLabel);
@@ -38,7 +38,7 @@ public class BuscaLivroGUI extends JFrame {
         panel.add(new JLabel()); // Espaço vazio para alinhar o botão
         panel.add(buscarButton);
 
-        // Adicione o painel à janela
+        // Adicionando o painel à janela
         add(panel);
 
         // Configure a ação do botão "Buscar"
@@ -66,6 +66,7 @@ public class BuscaLivroGUI extends JFrame {
         });
     }
 
+    // exibir resultados de busca
     private void exibirResultadosBusca(List<String[]> dadosLivros, String tipoBusca, String termoBusca) {
         StringBuilder resultados = new StringBuilder("Resultados da busca por " + tipoBusca + ":\n");
         boolean encontrouResultados = false;

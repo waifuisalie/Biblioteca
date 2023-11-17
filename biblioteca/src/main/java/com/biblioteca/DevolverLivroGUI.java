@@ -19,13 +19,16 @@ public class DevolverLivroGUI extends JFrame {
     private TableRowSorter<DefaultTableModel> sorter;
 
     public DevolverLivroGUI() {
+        // configuração da janela
         setTitle("Devolução de Livros");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
 
+        // painel principal
         mainPanel = new JPanel(new BorderLayout());
 
+        // painel para busca de livros
         JPanel buscaPanel = new JPanel();
         nomeMembroField = new JTextField();
         nomeMembroField.setPreferredSize(new Dimension(200, 25));
@@ -33,6 +36,7 @@ public class DevolverLivroGUI extends JFrame {
         buscaPanel.add(new JLabel("Nome do Membro:"));
         buscaPanel.add(nomeMembroField);
 
+        // listener para o botão de busca de livros
         buscarLivrosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,6 +45,8 @@ public class DevolverLivroGUI extends JFrame {
         });
 
         cancelarDevolucaoButton = new JButton("Cancelar");
+
+        // listener para o botão de cancelar
         cancelarDevolucaoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,19 +54,21 @@ public class DevolverLivroGUI extends JFrame {
             }
         });
         
-
         buscaPanel.add(buscarLivrosButton);
         buscaPanel.add(cancelarDevolucaoButton);
         mainPanel.add(buscaPanel, BorderLayout.NORTH);
 
+        // modelo e tabela para exibir resultados
         tableModel = new DefaultTableModel();
         resultadosTable = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(resultadosTable);
         mainPanel.add(tableScrollPane, BorderLayout.CENTER);
 
+        // painel para ações de devolução
         JPanel devolucaoPanel = new JPanel();
         devolverButton = new JButton("Realizar Devolução");
 
+        // listener para o botão de devolução
         devolverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,14 +76,13 @@ public class DevolverLivroGUI extends JFrame {
             }
         });
         
-        
-
         devolucaoPanel.add(cancelarDevolucaoButton);
         devolucaoPanel.add(devolverButton);
         mainPanel.add(devolucaoPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
 
+        // configuração de classificação na tabela
         sorter = new TableRowSorter<>(tableModel);
         resultadosTable.setRowSorter(sorter);
     }
@@ -98,6 +105,7 @@ public class DevolverLivroGUI extends JFrame {
         }
     }
 
+    // método para obter um livro pelo seu código
     private Livro obterLivroPorCodigo(String codigoLivro) {
         // Carregar os dados dos empréstimos
         List<String[]> emprestimos = CsvHandler.lerDados("emprestimos.csv");
@@ -119,8 +127,7 @@ public class DevolverLivroGUI extends JFrame {
         return null;
     }
 
-   
-
+    // método para preencher a tabela com os livros disponíveis para a devolução
     private void preencherTabela(List<String[]> dadosLivros, List<String[]> emprestimos, String nomeMembro) {
         tableModel.setRowCount(0);
 
@@ -149,6 +156,7 @@ public class DevolverLivroGUI extends JFrame {
         sorter.setRowFilter(null); // Limpar qualquer filtro existente
     }
 
+    // método para carregar os livros disponíveis para a devolução
     private void carregarLivros() {
         String nomeMembro = nomeMembroField.getText();
         if (verificarExistenciaMembro(nomeMembro)) {
@@ -160,7 +168,7 @@ public class DevolverLivroGUI extends JFrame {
         }
     }
 
-    // Implemente o método realizarDevolucao aqui
+    // método para realizar a devolução
     private void realizarDevolucao() {
          int selectedRow = resultadosTable.getSelectedRow();
                 if (selectedRow != -1) {
@@ -168,11 +176,13 @@ public class DevolverLivroGUI extends JFrame {
                     String nomeMembro = nomeMembroField.getText();  // Obtém o nome do membro do TextField
                     List<String[]> emprestimos = CsvHandler.verificarECarregarArquivoCSV("emprestimos.csv");
         
-                    // Certifique-se de que a lista não está vazia e tem dados suficientes
+                    // garante que a lista não está vazia e tem dados suficientes
                     if (!emprestimos.isEmpty() && emprestimos.get(0).length > 5) {
+
                         // Iterar sobre as linhas para encontrar o livro
                         for (String[] emprestimo : emprestimos) {
                             if (emprestimo.length > 2 && emprestimo[2].trim().equals(codigoLivro)) {
+
                                 // A linha foi encontrada, agora podemos obter a data de devolução
                                 String dataDevolucao = emprestimo[5].trim();
                                 String tipoMembro = emprestimo[0].trim();
@@ -181,9 +191,8 @@ public class DevolverLivroGUI extends JFrame {
                                 Membro membro = criarMembro(tipoMembro, nomeMembro);
         
                                 // Crie uma instância de Livro com base no código
-                                Livro livro = obterLivroPorCodigo(codigoLivro); // Você precisa implementar esse método
+                                Livro livro = obterLivroPorCodigo(codigoLivro); 
         
-                                // Continue com a lógica de dias de atraso e multa
                                 int diasAtraso = CalculadoraDiasAtraso.calcularDiasAtraso(dataDevolucao);
                                 System.out.println(diasAtraso);
         
@@ -197,10 +206,9 @@ public class DevolverLivroGUI extends JFrame {
 
                                     String mensagem = "Devolução com atraso de " + diasAtraso + " dias.\nMulta a ser paga: " + multa;
 
-                                    // Implemente lógica para mostrar um JOptionPane personalizado com a multa
                                     int escolha = JOptionPane.showConfirmDialog(null, mensagem + "\nVocê concorda em pagar a multa?", "Aviso", JOptionPane.YES_NO_OPTION);
 
-                                    // Verifique a escolha do usuário
+                                    // Verifica escolha do usuário
                                     if (escolha == JOptionPane.YES_OPTION) {
                                         // Usuário concordou em pagar a multa
                                         // 1. Excluir linha de empréstimo em emprestimos.csv
@@ -212,6 +220,7 @@ public class DevolverLivroGUI extends JFrame {
                                                 break;
                                             }
                                         }
+                                        // escreve a linha atualizada (apaga)
                                         CsvHandler.escreverLinhas("emprestimos.csv", emprestimos_updt);
 
                                         // 2. Atualizar disponibilidade do livro em livros.csv
@@ -228,13 +237,11 @@ public class DevolverLivroGUI extends JFrame {
 
                                     // Exiba mensagem de sucesso
                                     JOptionPane.showMessageDialog(null, "Devolução realizada com sucesso.\nMulta paga.");
+
                                     // Recarregar a tabela com os livros atualizados
                                     carregarLivros();
 
-                                    } else {
-                                        // Usuário optou por não pagar a multa, implemente a lógica apropriada
-                                        // ...
-                                    }
+                                    } 
                                 } else {
                                     // Usuário concordou em pagar a multa
                                         // 1. Excluir linha de empréstimo em emprestimos.csv
@@ -276,15 +283,8 @@ public class DevolverLivroGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Dados de empréstimos ausentes ou formato incorreto.");
                 }
             }
-        
-        
-        
-
-        
     
-
-    
-
+    // método que verifica existência
     private boolean verificarExistenciaMembro(String nomeMembro) {
         List<String[]> dadosMembros = CsvHandler.lerDados("membros.csv");
     
@@ -296,8 +296,6 @@ public class DevolverLivroGUI extends JFrame {
         return false; // Membro não encontrado
     }
     
-    
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

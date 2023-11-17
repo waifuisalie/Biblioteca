@@ -16,11 +16,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class CsvHandler {
+    // método para escrever dados 
     public static void escreverDados(String nomeArquivo, List<String[]> dados) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(nomeArquivo, true))) {
             writer.writeAll(dados);
         } catch (IOException e) {
-            e.printStackTrace(); // Trate ou registre exceções conforme necessário
+            e.printStackTrace();
         }
     }
 
@@ -30,6 +31,7 @@ public class CsvHandler {
         escreverDados(nomeArquivo, dados);
     }
 
+    // método privado para converter objetos em uma lista de strings
     private static <T> List<String[]> converterObjetosParaDados(List<T> objetos, ConversorObjetoParaStrings<T> conversor) {
         return conversor.converterParaDados(objetos);
     }
@@ -39,6 +41,7 @@ public class CsvHandler {
         List<String[]> converterParaDados(List<T> objetos);
     }
 
+    // métodos para ler dados
     public static List<String[]> lerDados(String nomeArquivo) {
         try (CSVReader reader = new CSVReader(new FileReader(nomeArquivo))) {
             return reader.readAll();
@@ -48,7 +51,7 @@ public class CsvHandler {
         return null;
     }
 
-    
+    //método para escrever uma única linha em um arquivo
     public static void escreverLinha(String nomeArquivo, String linha) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo, true))) {
             writer.write(linha);
@@ -58,6 +61,7 @@ public class CsvHandler {
         }
     }
 
+    // método para obter o tipo de membro com base no nome do membro
     public static String obterTipoMembro(String nomeMembro, String nomeArquivo) {
         List<String[]> dados = lerDados(nomeArquivo);
 
@@ -69,6 +73,7 @@ public class CsvHandler {
         return null; // Membro não encontrado ou tipo de membro não especificado
     }
 
+    // método para atualizar uma linha em um arquivo
     public static void atualizarLinha(String nomeArquivo, String chave, String novaLinha) {
         try {
             List<String[]> linhas = lerDados(nomeArquivo);
@@ -86,11 +91,11 @@ public class CsvHandler {
                 System.out.println("Lista de linhas nula ao tentar atualizar.");
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Trate ou registre exceções conforme necessário
+            e.printStackTrace(); 
         }
     }
     
-    
+    //método para escrever várias linhas em um arquivo
     public static void escreverLinhas(String nomeArquivo, List<String[]> linhas) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(nomeArquivo))) {
             writer.writeAll(linhas);
@@ -99,6 +104,7 @@ public class CsvHandler {
         }
     }
     
+    // métodos para ler livros de um arquivo 
     public static List<Livro> lerLivros(String nomeArquivo) {
         List<Livro> livros = new ArrayList<>();
 
@@ -116,6 +122,8 @@ public class CsvHandler {
 
         return livros;
     }
+
+    // método que verifica e carrega (lê) o arquivo
     public static List<String[]> verificarECarregarArquivoCSV(String nomeArquivo) {
         if (verificarExistenciaArquivo(nomeArquivo)) {
             return lerDados(nomeArquivo);
@@ -125,10 +133,12 @@ public class CsvHandler {
         }
     }
 
+    // método que verifica se o arquivo existe
     public static boolean verificarExistenciaArquivo(String nomeArquivo) {
         Path path = Paths.get(nomeArquivo);
         return Files.exists(path);
     }
+
 
     public static boolean registroJaCadastrado(String nomeArquivo, int columnIndex, String valor) {
         // Verificar se o arquivo CSV existe antes de tentar lê-lo
@@ -147,19 +157,17 @@ public class CsvHandler {
         return false;
     }
     
-    // n sei aonde pode ser usado
+    // método para verificar e criar um arquivo
     public static void verificarECriarArquivoCSV(String nomeArquivo) {
         if (verificarExistenciaArquivo(nomeArquivo)) {
             System.out.println("O arquivo já existe.");
-            // Adicione aqui a lógica específica, se necessário, quando o arquivo já existir.
         } else {
             System.out.println("O arquivo não existe. Será criado.");
-            // Adicione aqui a lógica específica para criar o arquivo, se ele não existir.
             criarArquivo(nomeArquivo);
         }
     }
 
-
+    // método para criar arquivo
     public static void criarArquivo(String nomeArquivo) {
         Path path = Paths.get(nomeArquivo);
         try {

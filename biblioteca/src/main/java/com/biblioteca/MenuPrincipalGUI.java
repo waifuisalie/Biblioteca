@@ -41,16 +41,21 @@ public class MenuPrincipalGUI extends JFrame {
         cadastrarMembroButton.setPreferredSize(buttonSize);
         sairButton.setPreferredSize(buttonSize);
 
+        // configuração do layout usando GridBagConsraints para o painel
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+
+        gbc.gridx = 0; // coluna 0
+        gbc.gridy = 0; // linha 0
+
+        // define as margens
         gbc.insets = new Insets(10, 0, 10, 0); // Adiciona espaço entre os botões
         panel.add(cadastrarLivroButton, gbc);
 
+        // muda a linha para 1
         gbc.gridy = 1;
         panel.add(devolverLivroButton, gbc);
 
-        // Adicione o botão "Emprestar Livro" logo após o botão "Devolver Livro"
+        // muda a linha para 2        
         gbc.gridy = 2;
         panel.add(emprestarLivroButton, gbc);
 
@@ -70,6 +75,7 @@ public class MenuPrincipalGUI extends JFrame {
         cadastrarLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // abre a interface gráfica para a cadastrar de livros
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -83,6 +89,7 @@ public class MenuPrincipalGUI extends JFrame {
         devolverLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // abre a interface gráfica para a devoluçao de livros
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -110,6 +117,7 @@ public class MenuPrincipalGUI extends JFrame {
         buscarLivroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // abre a interface para buscar livros
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -123,6 +131,7 @@ public class MenuPrincipalGUI extends JFrame {
         cadastrarMembroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // abre a interface gráfica para cadastrar membro
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -141,9 +150,11 @@ public class MenuPrincipalGUI extends JFrame {
         });
     }
 
+    // classe interna para exibir uma imagem de fundo
     private class BackgroundPanel extends JPanel {
         private Image background;
 
+        // construtor que carrega a imagem de fundo
         public BackgroundPanel() {
             try {
                 background = ImageIO.read(new File(BACKGROUND_IMAGE_PATH));
@@ -152,6 +163,7 @@ public class MenuPrincipalGUI extends JFrame {
             }
         }
 
+        // sobreescreve o método paintComponent para desenhar a imagem de fundo
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);

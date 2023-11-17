@@ -20,7 +20,6 @@ class Livro extends ItemBiblioteca {
         return autor;
     }
 
-
     public int getAno() {
         return ano;
     }
@@ -37,35 +36,14 @@ class Livro extends ItemBiblioteca {
         this.disponivel = false;
     }
 
-    
-
-    //idk if I am gonna use this
-    public void emprestar() {
-        if (disponivel) {
-            System.out.println("Livro emprestado: " + getTitulo());
-            setDisponivel(false);
-        } else {
-            System.out.println("Livro indisponível para empréstimo: " + getTitulo());
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Livro{" +
-                "titulo='" + getTitulo() + '\'' +
-                ", autor='" + autor + '\'' +
-                ", ano=" + ano +
-                ", disponivel=" + disponivel +
-                '}';
-    }
-
+    // método para obter os dados do Livro para serem escritos em arquivo csv
     public List<String[]> obterDadosParaCSV() {
         List<String[]> dados = new ArrayList<>();
         dados.add(new String[]{getTitulo(), getCodigo(), autor, Integer.toString(ano), Boolean.toString(disponivel)});
         return dados;
     }
 
-
+    // método estático para obter um livro pelo código
     public static Livro obterLivroPorCodigo(String codigo) {
     List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
 
@@ -74,8 +52,6 @@ class Livro extends ItemBiblioteca {
             return new Livro(livro[0].trim(), livro[1].trim(), livro[2].trim(), Integer.parseInt(livro[3].trim()));
         }
     }
-
     return null; // Retorna null se o livro não for encontrado
 }
-
 }
