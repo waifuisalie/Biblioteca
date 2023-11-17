@@ -1,8 +1,6 @@
 package com.biblioteca;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
@@ -103,14 +101,6 @@ public class EmprestarLivroGUI extends JFrame {
         emprestimoPanel.add(emprestarButton);
         mainPanel.add(emprestimoPanel, BorderLayout.SOUTH);
 
-        // resultados da tabela
-        resultadosTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                setBotoesVisiveis(resultadosTable.getSelectedRow() != -1);
-            }
-        });
-
         add(mainPanel);
 
         List<String[]> dadosLivros = CsvHandler.verificarECarregarArquivoCSV("livros.csv");
@@ -120,13 +110,6 @@ public class EmprestarLivroGUI extends JFrame {
         resultadosTable.setRowSorter(sorter);
     }
 
-    // botões devem ficar visíveis
-    private void setBotoesVisiveis(boolean visivel) {
-        emprestarButton.setEnabled(visivel);
-        cancelarEmprestimoButton.setEnabled(visivel);
-    }
-
-    
     // método para preencher a tabela
     private void preencherTabela(List<String[]> dados, String termoBusca, String criterioBusca) {
         // limpa todsa as linhas da tabela

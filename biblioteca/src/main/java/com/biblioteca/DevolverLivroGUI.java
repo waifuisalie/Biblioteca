@@ -116,14 +116,13 @@ public class DevolverLivroGUI extends JFrame {
                 // O livro foi encontrado, retornar uma instância de Livro com base nos dados
                 String titulo = emprestimo[3].trim();
                 String autor = emprestimo[4].trim();
-                int ano = 0; // Certifique-se de ajustar a posição conforme necessário
-                // Outros dados do livro podem ser obtidos da linha do empréstimo
+                int ano = 0; 
 
                 return new Livro(titulo, codigoLivro, autor, ano);
             }
         }
 
-        // Se não encontrar, retorne null ou lide com isso conforme necessário
+        // Se não encontrar, retorne null
         return null;
     }
 
@@ -171,6 +170,7 @@ public class DevolverLivroGUI extends JFrame {
     // método para realizar a devolução
     private void realizarDevolucao() {
          int selectedRow = resultadosTable.getSelectedRow();
+                // se está sendo selecionado uma linha da tabela
                 if (selectedRow != -1) {
                     String codigoLivro = ((String) resultadosTable.getValueAt(selectedRow, 1)).trim();
                     String nomeMembro = nomeMembroField.getText();  // Obtém o nome do membro do TextField
@@ -194,14 +194,12 @@ public class DevolverLivroGUI extends JFrame {
                                 Livro livro = obterLivroPorCodigo(codigoLivro); 
         
                                 int diasAtraso = CalculadoraDiasAtraso.calcularDiasAtraso(dataDevolucao);
-                                System.out.println(diasAtraso);
         
                                 // Verifique os dias de atraso
                                 if (diasAtraso > 0) {        
                                     // Crie uma instância de Emprestimo
                                     Emprestimo emprestimoObj = new Emprestimo(membro, livro, dataDevolucao);
-                                    
-                                    // Implemente lógica para calcular multa.
+                    
                                     double multa = ((CalculaMulta) membro).calcularMulta(emprestimoObj);
 
                                     String mensagem = "Devolução com atraso de " + diasAtraso + " dias.\nMulta a ser paga: " + multa;
